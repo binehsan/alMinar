@@ -256,7 +256,7 @@ class Prayer(AbstractModel):
     def __str__(self):
         return self.get_name_display()
     
-    
+
 class PrayerTime(AbstractModel):
 
     prayerTimeID = models.AutoField(primary_key=True)
@@ -297,4 +297,21 @@ class Signal(AbstractModel):
     
 
     
+class VerifiedBadge(AbstractModel):
+    badgeID = models.AutoField(primary_key=True)
+    masjid = models.ForeignKey(Masjid, on_delete=models.CASCADE)
+    issuedBy = models.ForeignKey(AdminUser, on_delete=models.CASCADE)
+    issueDate = models.DateTimeField(auto_now_add=True)
+    expiryDate = models.DateTimeField(null=True, blank=True)
+
+
+class FavouriteMasjid(AbstractModel):
+    favID = models.AutoField(primary_key=True)
+    user = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
+    masjid = models.ForeignKey(Masjid, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("user", "masjid")
+
+
 
