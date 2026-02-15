@@ -1,6 +1,7 @@
-from django.db import models
+import uuid
 
-# Create your models here.
+from django.core.exceptions import ValidationError
+from django.db import models
 
 class AbstractModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -25,20 +26,39 @@ class RegularUser(AbstractUserModel):
 
 class Masjid(AbstractModel):
     name = models.CharField(max_length=255)
-    masjidID = models.AutoField(primary_key=True)
+    masjidID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(blank=True, null=True)
     isActive = models.BooleanField(default=True)
-    confidenceRecord = models.ForeignKey('ConfidenceRecord', on_delete=models.CASCADE, null=True, blank=True)
-    locationRecord = models.ForeignKey('LocationRecord', on_delete=models.CASCADE, null=True, blank=True)
+    confidenceRecord = models.ForeignKey(
+        'ConfidenceRecord', on_delete=models.CASCADE, null=True, blank=True,
+        related_name="masjid_confidence",
+    )
+    locationRecord = models.ForeignKey(
+        'LocationRecord', on_delete=models.CASCADE, null=True, blank=True,
+        related_name="masjid_location",
+    )
 
 
 class ConfidenceRecord(AbstractModel):
-    crID = models.AutoField(primary_key=True)
-    # Confidence Levels: 0 (User Reported), 1 (Community Verified), 2 (Masjid Verified - Maintained), 3 (Masjid Verified - not Maintained)
-    confidenceLevel = models.IntegerField(default=0)
+
+    CONFIDENCE_LEVELS = [
+        (0, "C0 - Community Reported"),
+        (1, "C1 - Community Confirmed"),
+        (2, "C2 - Masjid Verified"),
+        (3, "C3 - Actively Maintained"),
+    ]
+
+    # Decay schedule: C3→C2 = 90 days, C2→C1 = 180 days, C1→C0 = 365 days
+    DECAY_DAYS = {3: 90, 2: 180, 1: 365}
+
+    crID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    confidenceLevel = models.IntegerField(default=0, choices=CONFIDENCE_LEVELS)
     masjid = models.ForeignKey(Masjid, on_delete=models.CASCADE)
     lastConfirmationDate = models.DateTimeField(auto_now=True)
     decayDate = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.masjid.name} - C{self.confidenceLevel}"
 
 class LocationRecord(AbstractModel):
 
@@ -206,24 +226,39 @@ class LocationRecord(AbstractModel):
     "ZM - Republic of Zambia",
     "ZW - Republic of Zimbabwe"
 ]
-    lrID = models.AutoField(primary_key=True)
+    lrID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     latitude = models.FloatField()
     longitude = models.FloatField()
     masjid = models.ForeignKey(Masjid, on_delete=models.CASCADE)
     city = models.CharField(max_length=255, blank=True, null=True)
-    country = models.OptionsField(choices=countries)
+    country = models.CharField(max_length=255, choices=[(c, c) for c in countries])
     region = models.CharField(max_length=255, blank=True, null=True)
 
 
 class PrayerTimeRecord(AbstractModel):
 
-    ptrID = models.AutoField(primary_key=True)
+    MODEL_TYPE_CHOICES = [
+        ("FULL_TIMETABLE", "Full timetable"),
+        ("IQAMA_ONLY", "Iqama only"),
+        ("ADHAN_ONLY", "Adhan only"),
+        ("UNKNOWN", "Unknown"),
+    ]
+
+    ptrID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     masjid = models.ForeignKey(
         Masjid,
         on_delete=models.CASCADE,
         related_name="prayer_time_records"
     )
+
+    modelType = models.CharField(
+        max_length=20,
+        choices=MODEL_TYPE_CHOICES,
+        default="UNKNOWN",
+    )
+
+    isVariable = models.BooleanField(default=False)
 
     # Date this set of prayer times applies to
     date = models.DateField()
@@ -236,9 +271,6 @@ class PrayerTimeRecord(AbstractModel):
 
     def __str__(self):
         return f"{self.masjid.name} - {self.date}"
-
-
-from django.core.exceptions import ValidationError
 
 
 class Prayer(AbstractModel):
@@ -259,7 +291,7 @@ class Prayer(AbstractModel):
 
 class PrayerTime(AbstractModel):
 
-    prayerTimeID = models.AutoField(primary_key=True)
+    prayerTimeID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     record = models.ForeignKey(
         PrayerTimeRecord,
@@ -289,24 +321,65 @@ class PrayerTime(AbstractModel):
 
 
 class Signal(AbstractModel):
-    signalID = models.AutoField(primary_key=True)
+
+    SIGNAL_TYPES = [
+        ("PRAYED", "User prayed here"),
+        ("JUMMAH", "Jummah observed"),
+        ("ACTIVE", "Masjid confirmed active"),
+        ("ADMIN_VERIFY", "Masjid self-verification"),
+    ]
+
+    SOURCE_TYPES = [
+        ("USER", "Regular user"),
+        ("ADMIN", "Masjid admin"),
+        ("SYSTEM", "System generated"),
+    ]
+
+    signalID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     masjid = models.ForeignKey(Masjid, on_delete=models.CASCADE)
-    user = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
-    signalType = models.CharField(max_length=255)
+    user = models.ForeignKey(RegularUser, on_delete=models.CASCADE, null=True, blank=True)
+    signalType = models.CharField(max_length=20, choices=SIGNAL_TYPES)
+    sourceType = models.CharField(max_length=10, choices=SOURCE_TYPES, default="USER")
     description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.get_sourceType_display()}: {self.get_signalType_display()} @ {self.masjid.name}"
     
 
     
 class VerifiedBadge(AbstractModel):
-    badgeID = models.AutoField(primary_key=True)
+    badgeID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     masjid = models.ForeignKey(Masjid, on_delete=models.CASCADE)
     issuedBy = models.ForeignKey(AdminUser, on_delete=models.CASCADE)
     issueDate = models.DateTimeField(auto_now_add=True)
     expiryDate = models.DateTimeField(null=True, blank=True)
+    isActive = models.BooleanField(default=True)
+    isRevoked = models.BooleanField(default=False)
+    lastCheckedAt = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        status = "Active" if self.isActive and not self.isRevoked else "Inactive"
+        return f"Badge {self.token} ({status}) - {self.masjid.name}"
+
+
+class MasjidAdmin(AbstractModel):
+    masjidAdminID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(RegularUser, on_delete=models.CASCADE, related_name="managed_masjids")
+    masjid = models.ForeignKey(Masjid, on_delete=models.CASCADE, related_name="masjid_admins")
+    verifiedIdentity = models.BooleanField(default=False)
+    verifiedAt = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ("user", "masjid")
+
+    def __str__(self):
+        status = "Verified" if self.verifiedIdentity else "Unverified"
+        return f"{self.user.username} → {self.masjid.name} ({status})"
 
 
 class FavouriteMasjid(AbstractModel):
-    favID = models.AutoField(primary_key=True)
+    favID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
     masjid = models.ForeignKey(Masjid, on_delete=models.CASCADE)
 

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Al-Minār — Test Inventory (128 Tests)</title>
+<style>
+  @media print {
+    body { font-size: 9pt; }
+    table { page-break-inside: auto; }
+    tr { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+    .no-print { display: none; }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: #1a1a1a;
+    background: #f8f9fa;
+    padding: 2rem;
+    line-height: 1.5;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 3px solid #2563eb;
+  }
+  header h1 { font-size: 1.8rem; color: #1e293b; margin-bottom: .25rem; }
+  header p { color: #64748b; font-size: .95rem; }
+  .print-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: .5rem 1.5rem;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: .9rem;
+    cursor: pointer;
+  }
+  .print-btn:hover { background: #1d4ed8; }
+
+  /* Summary bar */
+  .summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-bottom: 2rem;
+  }
+  .summary .chip {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: .5rem 1rem;
+    font-size: .85rem;
+  }
+  .chip strong { color: #2563eb; }
+
+  /* Section */
+  .section { margin-bottom: 2.5rem; }
+  .section h2 {
+    font-size: 1.15rem;
+    color: #1e293b;
+    margin-bottom: .15rem;
+  }
+  .section .subtitle {
+    font-size: .85rem;
+    color: #64748b;
+    margin-bottom: .75rem;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    margin-bottom: .5rem;
+    font-size: .85rem;
+  }
+  th {
+    background: #f1f5f9;
+    text-align: left;
+    padding: .55rem .75rem;
+    font-weight: 600;
+    color: #334155;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  td {
+    padding: .5rem .75rem;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+  .num { text-align: center; width: 2.5rem; color: #94a3b8; font-weight: 600; }
+  code {
+    font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+    font-size: .8rem;
+    background: #f1f5f9;
+    padding: .1rem .35rem;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1>Al-Minār — Complete Test Inventory</h1>
+  <p>128 tests · 23 test classes · Generated 15 Feb 2026</p>
+  <button class="print-btn no-print" onclick="window.print()">⬇ Save as PDF / Print</button>
+</header>
+
+<!-- Summary -->
+<div class="summary">
+  <div class="chip">Model constraints &amp; defaults: <strong>17</strong></div>
+  <div class="chip">Serializer validation: <strong>6</strong></div>
+  <div class="chip">API CRUD &amp; permissions: <strong>41</strong></div>
+  <div class="chip">JWT authentication: <strong>3</strong></div>
+  <div class="chip">Confidence upgrade (signals): <strong>14</strong></div>
+  <div class="chip">Confidence decay (time): <strong>10</strong></div>
+  <div class="chip">Prayer time schemas: <strong>7</strong></div>
+  <div class="chip">Badge verification lifecycle: <strong>16</strong></div>
+  <div class="chip">User favourites logic: <strong>9</strong></div>
+  <div class="chip">Management command: <strong>2</strong></div>
+  <div class="chip" style="border-color:#2563eb">Total: <strong>128</strong></div>
+</div>
+
+<!-- ================================================================== -->
+<!-- 1. MODEL TESTS -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>1 · Model Tests</h2>
+<div class="subtitle">MasjidModelTest — 3 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><code>test_masjid_creation_generates_uuid</code></td><td>PK is auto-generated UUID</td><td>Create Masjid → assert <code>masjidID</code> is <code>uuid.UUID</code></td></tr>
+<tr><td class="num">2</td><td><code>test_masjid_default_active</code></td><td>New masjids default to active</td><td>Create Masjid → assert <code>isActive=True</code></td></tr>
+<tr><td class="num">3</td><td><code>test_masjid_timestamps</code></td><td>Auto-timestamps on creation</td><td>Create Masjid → assert <code>created_at</code> and <code>updated_at</code> not None</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">ConfidenceRecordModelTest — 3 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">4</td><td><code>test_default_confidence_level</code></td><td>New records start at C0</td><td>Create ConfidenceRecord → assert <code>confidenceLevel=0</code></td></tr>
+<tr><td class="num">5</td><td><code>test_str_representation</code></td><td><code>__str__</code> format correct</td><td>Create at C2 → assert str = <code>"Masjid Al-Noor - C2"</code></td></tr>
+<tr><td class="num">6</td><td><code>test_decay_days_constant</code></td><td>DECAY_DAYS matches spec</td><td>Assert <code>{3: 90, 2: 180, 1: 365}</code></td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">LocationRecordModelTest — 1 test</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">7</td><td><code>test_creation</code></td><td>Location with valid data</td><td>Create with lat/lng/city/country → assert UUID PK, city matches</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">PrayerTimeRecordModelTest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">8</td><td><code>test_unique_together_masjid_date</code></td><td>One record per masjid per date</td><td>Create record → create duplicate → assert exception</td></tr>
+<tr><td class="num">9</td><td><code>test_default_model_type</code></td><td>Defaults to <code>"UNKNOWN"</code></td><td>Create record → assert <code>modelType="UNKNOWN"</code></td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">PrayerTimeModelTest — 1 test</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">10</td><td><code>test_clean_raises_without_times</code></td><td>Must have adhan or iqama</td><td>Create PrayerTime with both None → <code>clean()</code> → <code>ValidationError</code></td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">SignalModelTest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">11</td><td><code>test_signal_creation</code></td><td>Signal gets UUID PK</td><td>Create Signal with user → assert <code>signalID</code> is UUID</td></tr>
+<tr><td class="num">12</td><td><code>test_system_signal_no_user</code></td><td>System allows null user</td><td>Create with <code>sourceType=SYSTEM, user=None</code> → assert user is None</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">VerifiedBadgeModelTest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">13</td><td><code>test_badge_tokens_are_unique</code></td><td>Unique token per badge</td><td>Create 2 badges → assert <code>b1.token ≠ b2.token</code></td></tr>
+<tr><td class="num">14</td><td><code>test_default_active_not_revoked</code></td><td>Defaults: active, not revoked</td><td>Create badge → assert <code>isActive=True, isRevoked=False</code></td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">FavouriteMasjidModelTest — 1 test</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">15</td><td><code>test_unique_together</code></td><td>No duplicate favourites</td><td>Create favourite → create duplicate → assert exception</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">MasjidAdminModelTest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">16</td><td><code>test_creation</code></td><td>Default unverified identity</td><td>Create MasjidAdmin → assert <code>verifiedIdentity=False</code></td></tr>
+<tr><td class="num">17</td><td><code>test_unique_together</code></td><td>User+masjid pair unique</td><td>Create → create duplicate → assert exception</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<!-- 2. SERIALIZER TESTS -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>2 · Serializer Tests</h2>
+<div class="subtitle">MasjidSerializerTest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">18</td><td><code>test_fields_present</code></td><td>All expected keys in output</td><td>Serialize Masjid → assert keys = <code>{masjidID, name, description, isActive, confidenceRecord, locationRecord, created_at, updated_at}</code></td></tr>
+<tr><td class="num">19</td><td><code>test_read_only_fields</code></td><td>Can't set auto fields</td><td>Pass fake <code>masjidID</code> → save → assert PK ≠ fake ID</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">PrayerTimeSerializerTest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">20</td><td><code>test_validation_requires_at_least_one_time</code></td><td>Rejects both times null</td><td>Submit <code>adhan=None, iqama=None</code> → <code>is_valid()=False</code></td></tr>
+<tr><td class="num">21</td><td><code>test_valid_with_iqama_only</code></td><td>Accepts iqama-only</td><td>Submit with only <code>iqama_time</code> → <code>is_valid()=True</code></td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">SignalSerializerTest — 1 test</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">22</td><td><code>test_includes_source_type</code></td><td>sourceType in output</td><td>Serialize Signal → assert <code>data["sourceType"]="USER"</code></td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">VerifiedBadgeSerializerTest — 1 test</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">23</td><td><code>test_token_is_read_only</code></td><td>Token can't be overwritten</td><td>PATCH with new token → save → assert token unchanged</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<!-- 3. API CRUD & PERMISSIONS -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>3 · API CRUD &amp; Permissions</h2>
+
+<div class="subtitle">MasjidAPITest — 7 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">24</td><td><code>test_list_masjids_no_auth</code></td><td>Public read</td><td><code>GET /api/masjids/</code> unauth → 200</td></tr>
+<tr><td class="num">25</td><td><code>test_retrieve_masjid_no_auth</code></td><td>Public detail</td><td><code>GET /api/masjids/{id}/</code> → 200, name matches</td></tr>
+<tr><td class="num">26</td><td><code>test_create_masjid_requires_auth</code></td><td>Auth required for write</td><td><code>POST</code> unauth → 401</td></tr>
+<tr><td class="num">27</td><td><code>test_create_masjid_authenticated</code></td><td>Auth user can create</td><td>Auth → <code>POST</code> → 201, UUID returned</td></tr>
+<tr><td class="num">28</td><td><code>test_search_masjids</code></td><td>Search filter works</td><td>2 masjids → <code>?search=Noor</code> → only matching</td></tr>
+<tr><td class="num">29</td><td><code>test_filter_by_active</code></td><td>Boolean filter works</td><td>Create inactive → <code>?isActive=false</code> → only inactive</td></tr>
+<tr><td class="num">30</td><td><code>test_delete_masjid_requires_auth</code></td><td>Auth required for delete</td><td><code>DELETE</code> unauth → 401</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">MasjidNestedActionsTest — 3 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">31</td><td><code>test_prayer_times_action</code></td><td>Nested prayer times</td><td>Create record → <code>GET /masjids/{id}/prayer_times/</code> → 200, 1 result</td></tr>
+<tr><td class="num">32</td><td><code>test_signals_action</code></td><td>Nested signals</td><td>Create Signal → <code>GET /masjids/{id}/signals/</code> → 200, 1 result</td></tr>
+<tr><td class="num">33</td><td><code>test_badges_action</code></td><td>Nested badges</td><td>Create Badge → <code>GET /masjids/{id}/badges/</code> → 200, 1 result</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">ConfidenceRecordAPITest — 4 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">34</td><td><code>test_list_public</code></td><td>Public read</td><td><code>GET /api/confidence-records/</code> → 200</td></tr>
+<tr><td class="num">35</td><td><code>test_create_requires_admin</code></td><td>Regular user blocked</td><td>Auth as user → <code>POST</code> → 403</td></tr>
+<tr><td class="num">36</td><td><code>test_create_as_admin</code></td><td>Superuser can create</td><td>Auth as admin → <code>POST</code> level=2 → 201</td></tr>
+<tr><td class="num">37</td><td><code>test_filter_by_level</code></td><td>Filter by confidenceLevel</td><td>C0 + C3 → <code>?confidenceLevel=0</code> → only C0</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">LocationRecordAPITest — 3 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">38</td><td><code>test_list_public</code></td><td>Public read</td><td><code>GET /api/location-records/</code> → 200</td></tr>
+<tr><td class="num">39</td><td><code>test_create_requires_auth</code></td><td>Auth required</td><td><code>POST</code> unauth → 401</td></tr>
+<tr><td class="num">40</td><td><code>test_search_by_city</code></td><td>Search filter on city</td><td>Create London → <code>?search=London</code> → ≥1 result</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">PrayerAPITest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">41</td><td><code>test_list_public</code></td><td>Public read-only</td><td><code>GET /api/prayers/</code> → 200</td></tr>
+<tr><td class="num">42</td><td><code>test_cannot_create</code></td><td>ReadOnly blocks POST</td><td><code>POST /api/prayers/</code> → 405</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">PrayerTimeRecordAPITest — 4 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">43</td><td><code>test_list_public</code></td><td>Public read</td><td><code>GET /api/prayer-time-records/</code> → 200</td></tr>
+<tr><td class="num">44</td><td><code>test_create_requires_auth</code></td><td>Auth required</td><td><code>POST</code> unauth → 401</td></tr>
+<tr><td class="num">45</td><td><code>test_create_authenticated</code></td><td>Auth user can create</td><td>Auth → <code>POST IQAMA_ONLY</code> → 201</td></tr>
+<tr><td class="num">46</td><td><code>test_filter_by_model_type</code></td><td>Filter works</td><td>FULL + UNKNOWN → <code>?modelType=FULL_TIMETABLE</code> → only FULL</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">SignalAPITest — 4 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">47</td><td><code>test_list_public</code></td><td>Public read</td><td><code>GET /api/signals/</code> → 200</td></tr>
+<tr><td class="num">48</td><td><code>test_create_requires_auth</code></td><td>Auth required</td><td><code>POST</code> unauth → 401</td></tr>
+<tr><td class="num">49</td><td><code>test_create_signal_authenticated</code></td><td>Auth user can create</td><td>Auth → <code>POST JUMMAH</code> → 201</td></tr>
+<tr><td class="num">50</td><td><code>test_filter_by_signal_type</code></td><td>Filter works</td><td>PRAYED + JUMMAH → <code>?signalType=PRAYED</code> → only PRAYED</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">VerifiedBadgeAPITest — 5 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">51</td><td><code>test_list_public</code></td><td>Public read</td><td><code>GET /api/badges/</code> → 200</td></tr>
+<tr><td class="num">52</td><td><code>test_create_requires_admin</code></td><td>Regular user blocked</td><td>Auth as user → <code>POST</code> → 403</td></tr>
+<tr><td class="num">53</td><td><code>test_create_as_admin</code></td><td>Admin can create</td><td>Auth as admin → <code>POST isActive=True</code> → 201</td></tr>
+<tr><td class="num">54</td><td><code>test_revoke_action</code></td><td>Revoke sets flags</td><td>Admin → <code>POST /badges/{id}/revoke/</code> → <code>isActive=F, isRevoked=T</code></td></tr>
+<tr><td class="num">55</td><td><code>test_revoke_requires_admin</code></td><td>User can't revoke</td><td>Auth as user → <code>POST revoke</code> → 403</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">BadgeVerifyEndpointTest — 5 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">56</td><td><code>test_verify_active_badge</code></td><td>Valid badge → <code>valid: true</code></td><td>Setup C2 + badge → <code>GET /verify/{token}/</code> → <code>valid=True</code>, name matches</td></tr>
+<tr><td class="num">57</td><td><code>test_verify_revoked_badge</code></td><td>Revoked → <code>valid: false</code></td><td>Revoked badge → verify → <code>valid=False</code></td></tr>
+<tr><td class="num">58</td><td><code>test_verify_expired_badge</code></td><td>Expired → <code>valid: false</code></td><td>Past expiryDate → verify → <code>valid=False</code></td></tr>
+<tr><td class="num">59</td><td><code>test_verify_nonexistent_token</code></td><td>Unknown token → 404</td><td><code>GET /verify/{random}/</code> → 404</td></tr>
+<tr><td class="num">60</td><td><code>test_verify_updates_last_checked</code></td><td>lastCheckedAt set</td><td>Badge → verify → <code>lastCheckedAt</code> not None</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">MasjidAdminAPITest — 3 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">61</td><td><code>test_list_requires_auth</code></td><td>Auth required</td><td><code>GET /api/masjid-admins/</code> unauth → 401</td></tr>
+<tr><td class="num">62</td><td><code>test_list_authenticated</code></td><td>Auth user can list</td><td>Auth → <code>GET</code> → 200</td></tr>
+<tr><td class="num">63</td><td><code>test_create_authenticated</code></td><td>Auth user can create</td><td>Auth → <code>POST</code> → 201, <code>verifiedIdentity=False</code></td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">FavouriteMasjidAPITest — 4 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">64</td><td><code>test_list_requires_auth</code></td><td>Auth required</td><td><code>GET /api/favourites/</code> unauth → 401</td></tr>
+<tr><td class="num">65</td><td><code>test_create_favourite</code></td><td>Auth user can favourite</td><td>Auth → <code>POST</code> → 201</td></tr>
+<tr><td class="num">66</td><td><code>test_duplicate_favourite_rejected</code></td><td>Duplicate → 400</td><td>Create in DB → <code>POST</code> same → 400</td></tr>
+<tr><td class="num">67</td><td><code>test_delete_favourite</code></td><td>Can unfavourite</td><td><code>DELETE /api/favourites/{id}/</code> → 204</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">AdminUserAPITest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">68</td><td><code>test_requires_admin</code></td><td>Regular user → 403</td><td>Auth as user → <code>GET /api/admin-users/</code> → 403</td></tr>
+<tr><td class="num">69</td><td><code>test_admin_can_list</code></td><td>Superuser can list</td><td>Auth as admin → <code>GET</code> → 200</td></tr>
+</tbody>
+</table>
+
+<div class="subtitle">RegularUserAPITest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">70</td><td><code>test_requires_auth</code></td><td>Unauth → 401</td><td><code>GET /api/users/</code> → 401</td></tr>
+<tr><td class="num">71</td><td><code>test_authenticated_can_list</code></td><td>Auth user can list</td><td>Auth → <code>GET</code> → 200</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<!-- 4. JWT -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>4 · JWT Authentication</h2>
+<div class="subtitle">JWTAuthTest — 3 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">72</td><td><code>test_obtain_token</code></td><td>Valid creds → tokens</td><td><code>POST /api/token/</code> valid creds → 200, <code>access</code> + <code>refresh</code></td></tr>
+<tr><td class="num">73</td><td><code>test_obtain_token_bad_creds</code></td><td>Wrong password → 401</td><td><code>POST /api/token/</code> wrong password → 401</td></tr>
+<tr><td class="num">74</td><td><code>test_refresh_token</code></td><td>Refresh → new access</td><td>Obtain → <code>POST /api/token/refresh/</code> → 200, new <code>access</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<!-- 5. CONFIDENCE UPGRADE FROM SIGNALS -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>5 · Business Logic — Confidence Upgrade from Signals</h2>
+<div class="subtitle">ConfidenceUpgradeFromSignalsTest — 14 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">75</td><td><code>test_single_user_signal_does_not_upgrade</code></td><td>1 user &lt; threshold (3)</td><td>C0 → 1 USER signal → <code>process_signal()</code> → C0 unchanged</td></tr>
+<tr><td class="num">76</td><td><code>test_two_user_signals_not_enough</code></td><td>2 users &lt; threshold</td><td>C0 → 2 unique USER signals → process → C0 unchanged</td></tr>
+<tr><td class="num">77</td><td><code>test_three_unique_users_upgrade_to_c1</code></td><td>3 unique users = threshold</td><td>C0 → 3 unique USER signals → process → C1 + decayDate set</td></tr>
+<tr><td class="num">78</td><td><code>test_community_signals_cannot_exceed_c1</code></td><td>USER signals cap at C1</td><td>C1 → 10 unique USER signals → process → C1 unchanged</td></tr>
+<tr><td class="num">79</td><td><code>test_same_user_multiple_signals_counts_as_one</code></td><td>Dedup by user</td><td>C0 → 5 signals same user → process → C0 unchanged</td></tr>
+<tr><td class="num">80</td><td><code>test_old_signals_outside_window_ignored</code></td><td>30-day window enforced</td><td>2 signals backdated 35d + 1 recent → process → C0 (only 1 recent)</td></tr>
+<tr><td class="num">81</td><td><code>test_admin_signal_upgrades_to_c2</code></td><td>ADMIN → C2</td><td>C0 → ADMIN signal → process → C2 + decayDate set</td></tr>
+<tr><td class="num">82</td><td><code>test_admin_signal_upgrades_c1_to_c2</code></td><td>ADMIN: C1 → C2</td><td>C1 → ADMIN signal → process → C2</td></tr>
+<tr><td class="num">83</td><td><code>test_admin_signal_upgrades_c2_to_c3</code></td><td>ADMIN: C2 → C3</td><td>C2 → ADMIN signal → process → C3</td></tr>
+<tr><td class="num">84</td><td><code>test_admin_signal_c3_stays_c3</code></td><td>C3 is max level</td><td>C3 → ADMIN signal → process → C3 unchanged</td></tr>
+<tr><td class="num">85</td><td><code>test_system_signal_does_not_upgrade</code></td><td>SYSTEM = informational</td><td>C0 → SYSTEM signal → process → C0 unchanged</td></tr>
+<tr><td class="num">86</td><td><code>test_process_signal_creates_confidence_record_if_missing</code></td><td>Auto-create record</td><td>No record → ADMIN signal → process → record created at C2</td></tr>
+<tr><td class="num">87</td><td><code>test_api_signal_create_triggers_confidence_upgrade</code></td><td>End-to-end API</td><td>C0 → <code>POST /api/signals/</code> ADMIN → 201 → DB shows C2</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<!-- 6. CONFIDENCE DECAY -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>6 · Business Logic — Confidence Decay Over Time</h2>
+<div class="subtitle">ConfidenceDecayTest — 10 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">88</td><td><code>test_c3_decays_to_c2</code></td><td>C3 → C2 after 90d</td><td>C3 + past decayDate → <code>decay_confidence()</code> → C2, new decayDate</td></tr>
+<tr><td class="num">89</td><td><code>test_c2_decays_to_c1</code></td><td>C2 → C1 after 180d</td><td>C2 + past decayDate → decay → C1</td></tr>
+<tr><td class="num">90</td><td><code>test_c1_decays_to_c0</code></td><td>C1 → C0 after 365d</td><td>C1 + past decayDate → decay → C0, decayDate=None</td></tr>
+<tr><td class="num">91</td><td><code>test_c0_does_not_decay_further</code></td><td>C0 is the floor</td><td>C0 + past decayDate → decay → False, C0 unchanged</td></tr>
+<tr><td class="num">92</td><td><code>test_no_decay_before_date</code></td><td>Future date = no decay</td><td>C3 + future decayDate → decay → False, C3 unchanged</td></tr>
+<tr><td class="num">93</td><td><code>test_no_decay_without_decay_date</code></td><td>Null date = no decay</td><td>C2 + decayDate=None → decay → False</td></tr>
+<tr><td class="num">94</td><td><code>test_decay_date_values</code></td><td>Correct day counts</td><td><code>calculate_decay_date(3)</code> ≈ +90d, <code>(2)</code> ≈ +180d, <code>(1)</code> ≈ +365d, <code>(0)</code> = None</td></tr>
+<tr><td class="num">95</td><td><code>test_batch_decay_multiple_records</code></td><td>Batch processes overdue</td><td>3 records (2 overdue, 1 future) → <code>decay_all_confidence()</code> → 2 decayed</td></tr>
+<tr><td class="num">96</td><td><code>test_cascading_decay_requires_multiple_runs</code></td><td>No double-decay</td><td>C3 overdue → decay → C2 with future date → 2nd decay → False, stays C2</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<!-- 7. PRAYER TIME SCHEMAS -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>7 · Business Logic — Prayer Time Schemas</h2>
+<div class="subtitle">PrayerTimeSchemaTest — 7 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">97</td><td><code>test_full_timetable_both_times</code></td><td>FULL: adhan + iqama</td><td>Create <code>FULL_TIMETABLE</code> record → POST all 5 prayers with both times → 201 each → verify via nested action</td></tr>
+<tr><td class="num">98</td><td><code>test_iqama_only_schema</code></td><td>IQAMA_ONLY: iqama only</td><td>Create <code>IQAMA_ONLY</code> record → POST 5 prayers with only <code>iqama_time</code> → 201 each</td></tr>
+<tr><td class="num">99</td><td><code>test_adhan_only_schema</code></td><td>ADHAN_ONLY: adhan only</td><td>Create <code>ADHAN_ONLY</code> record → POST 5 prayers with only <code>adhan_time</code> → 201 each</td></tr>
+<tr><td class="num">100</td><td><code>test_unknown_schema_no_times_rejected</code></td><td>Neither time → rejected</td><td>Create UNKNOWN record → POST prayer with no times → 400</td></tr>
+<tr><td class="num">101</td><td><code>test_unique_together_prayer_per_record</code></td><td>1 prayer per record</td><td>POST Fajr → 201 → POST Fajr again → 400</td></tr>
+<tr><td class="num">102</td><td><code>test_variable_prayer_times</code></td><td>isVariable flag works</td><td>POST record with <code>isVariable=True</code> → 201, flag in response</td></tr>
+<tr><td class="num">103</td><td><code>test_filter_prayer_time_records_by_date</code></td><td>Date filter works</td><td>2 records (Jun 1, Jun 2) → <code>?date=2026-06-01</code> → 1 result</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<!-- 8. BADGE VERIFICATION LIFECYCLE -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>8 · Business Logic — Badge Verification Lifecycle</h2>
+<div class="subtitle">BadgeVerificationLifecycleTest — 16 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">104</td><td><code>test_active_badge_with_c2_is_valid</code></td><td>C2 badge valid</td><td>Setup C2 → badge → <code>check_badge_validity()</code> → True</td></tr>
+<tr><td class="num">105</td><td><code>test_active_badge_with_c3_is_valid</code></td><td>C3 badge valid</td><td>Setup C3 → badge → check → True</td></tr>
+<tr><td class="num">106</td><td><code>test_revoked_badge_is_invalid</code></td><td>Revoked = invalid</td><td>C2 + badge <code>isRevoked=True</code> → check → False</td></tr>
+<tr><td class="num">107</td><td><code>test_inactive_badge_is_invalid</code></td><td>Inactive = invalid</td><td>C2 + badge <code>isActive=False</code> → check → False</td></tr>
+<tr><td class="num">108</td><td><code>test_badge_auto_deactivates_on_c1</code></td><td>C1 auto-deactivates</td><td>C1 → badge → check → False, DB <code>isActive=False</code></td></tr>
+<tr><td class="num">109</td><td><code>test_badge_auto_deactivates_on_c0</code></td><td>C0 auto-deactivates</td><td>C0 → badge → check → False, DB <code>isActive=False</code></td></tr>
+<tr><td class="num">110</td><td><code>test_badge_auto_deactivates_no_confidence_record</code></td><td>No record = deactivate</td><td>No ConfidenceRecord → badge → check → False, DB <code>isActive=False</code></td></tr>
+<tr><td class="num">111</td><td><code>test_expired_badge_auto_deactivates</code></td><td>Past expiry deactivates</td><td>C3 + past expiryDate → check → False, DB <code>isActive=False</code></td></tr>
+<tr><td class="num">112</td><td><code>test_future_expiry_is_valid</code></td><td>Future expiry = valid</td><td>C2 + expiry +365d → check → True</td></tr>
+<tr><td class="num">113</td><td><code>test_badge_deactivates_for_inactive_masjid</code></td><td>Inactive masjid = invalid</td><td>C3, <code>isActive=False</code> → badge → check → False</td></tr>
+<tr><td class="num">114</td><td><code>test_verify_endpoint_uses_badge_validity_logic</code></td><td>API uses service layer</td><td>C1 → badge → <code>GET /verify/{token}/</code> → <code>valid=False</code>, DB <code>isActive=False</code></td></tr>
+<tr><td class="num">115</td><td><code>test_verify_endpoint_valid_badge</code></td><td>API valid badge</td><td>C3 → badge → verify → <code>valid=True</code></td></tr>
+<tr><td class="num">116</td><td><code>test_verify_updates_last_checked</code></td><td>API sets lastCheckedAt</td><td>Badge → verify → <code>lastCheckedAt</code> not None</td></tr>
+<tr><td class="num">117</td><td><code>test_full_badge_lifecycle</code></td><td>Complete lifecycle</td><td>C3 → badge → verify valid → drop to C1 → verify invalid → <code>isActive=F</code> → admin revoke → <code>isRevoked=T</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<!-- 9. USER FAVOURITES -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>9 · Business Logic — User Favourites</h2>
+<div class="subtitle">UserFavouritesLogicTest — 9 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">118</td><td><code>test_mark_favourite</code></td><td>Can favourite a masjid</td><td>Auth → <code>POST /api/favourites/</code> → 201</td></tr>
+<tr><td class="num">119</td><td><code>test_mark_multiple_favourites</code></td><td>Multiple different masjids</td><td>Auth → POST 3 masjids → 201 each → DB count = 3</td></tr>
+<tr><td class="num">120</td><td><code>test_duplicate_favourite_prevented</code></td><td>Same pair → 400</td><td>Create in DB → POST same → 400</td></tr>
+<tr><td class="num">121</td><td><code>test_different_users_can_favourite_same_masjid</code></td><td>Multi-user same masjid</td><td>2 users fav same masjid → DB count = 2</td></tr>
+<tr><td class="num">122</td><td><code>test_filter_favourites_by_user</code></td><td>Filter <code>?user=X</code></td><td>2 for user1, 1 for user2 → filter → 2 results, all user1</td></tr>
+<tr><td class="num">123</td><td><code>test_filter_favourites_by_masjid</code></td><td>Filter <code>?masjid=X</code></td><td>2 users fav masjid1, 1 favs masjid2 → filter → 2 results</td></tr>
+<tr><td class="num">124</td><td><code>test_unfavourite_via_delete</code></td><td>DELETE removes it</td><td>Create → <code>DELETE /api/favourites/{id}/</code> → 204, DB empty</td></tr>
+<tr><td class="num">125</td><td><code>test_unfavourite_requires_auth</code></td><td>Auth required for delete</td><td><code>DELETE</code> unauth → 401</td></tr>
+<tr><td class="num">126</td><td><code>test_list_favourites_requires_auth</code></td><td>Auth required for list</td><td><code>GET</code> unauth → 401</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<!-- 10. MANAGEMENT COMMAND -->
+<!-- ================================================================== -->
+<div class="section">
+<h2>10 · Management Command</h2>
+<div class="subtitle">DecayConfidenceCommandTest — 2 tests</div>
+<table>
+<thead><tr><th class="num">#</th><th>Test</th><th>Criteria</th><th>Process Flow</th></tr></thead>
+<tbody>
+<tr><td class="num">127</td><td><code>test_command_output</code></td><td>Decays overdue + reports count</td><td>C3 past decayDate → <code>manage.py decay_confidence</code> → stdout: <code>"Decayed 1"</code></td></tr>
+<tr><td class="num">128</td><td><code>test_command_no_overdue</code></td><td>Reports 0 when nothing overdue</td><td>C3 future decayDate → run command → stdout: <code>"Decayed 0"</code></td></tr>
+</tbody>
+</table>
+</div>
+
+</div><!-- .container -->
+</body>
+</html>

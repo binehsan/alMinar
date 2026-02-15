@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Al-Minār — Complete Technical Reference</title>
+<style>
+  @media print {
+    body { font-size: 8.5pt; }
+    table { page-break-inside: auto; }
+    tr { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    .no-print { display: none; }
+    .section { margin-bottom: 1.5rem; }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: #1a1a1a;
+    background: #f8f9fa;
+    padding: 2rem;
+    line-height: 1.55;
+  }
+  .container { max-width: 1300px; margin: 0 auto; }
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 3px solid #2563eb;
+  }
+  header h1 { font-size: 1.9rem; color: #1e293b; margin-bottom: .2rem; }
+  header .sub { color: #64748b; font-size: .95rem; }
+  .print-btn {
+    display: inline-block; margin-top: 1rem; padding: .5rem 1.5rem;
+    background: #2563eb; color: #fff; border: none; border-radius: 6px;
+    font-size: .9rem; cursor: pointer;
+  }
+  .print-btn:hover { background: #1d4ed8; }
+
+  /* TOC */
+  .toc { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+  .toc h2 { font-size: 1.1rem; margin-bottom: .6rem; color: #1e293b; }
+  .toc ol { padding-left: 1.5rem; columns: 2; column-gap: 2rem; }
+  .toc li { font-size: .88rem; margin-bottom: .25rem; color: #334155; }
+  .toc a { color: #2563eb; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* Sections */
+  .section { margin-bottom: 2.5rem; }
+  .section h2 {
+    font-size: 1.25rem; color: #fff; background: #1e293b;
+    padding: .6rem 1rem; border-radius: 6px 6px 0 0; margin-bottom: 0;
+  }
+  .section h3 {
+    font-size: 1rem; color: #1e293b; margin: 1.25rem 0 .5rem 0;
+    padding-bottom: .25rem; border-bottom: 2px solid #e2e8f0;
+  }
+  .section-body {
+    background: #fff; border: 1px solid #e2e8f0; border-top: none;
+    border-radius: 0 0 6px 6px; padding: 1.25rem;
+  }
+  .desc { font-size: .88rem; color: #475569; margin-bottom: .75rem; }
+
+  /* Tables */
+  table {
+    width: 100%; border-collapse: collapse; font-size: .82rem;
+    margin-bottom: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  }
+  th {
+    background: #f1f5f9; text-align: left; padding: .5rem .65rem;
+    font-weight: 600; color: #334155; border-bottom: 2px solid #e2e8f0;
+  }
+  td {
+    padding: .45rem .65rem; border-bottom: 1px solid #f1f5f9; vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+  code {
+    font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+    font-size: .78rem; background: #f1f5f9; padding: .1rem .3rem; border-radius: 3px;
+  }
+  .badge {
+    display: inline-block; font-size: .7rem; font-weight: 600;
+    padding: .15rem .45rem; border-radius: 4px; vertical-align: middle;
+  }
+  .bg-blue { background: #dbeafe; color: #1e40af; }
+  .bg-green { background: #dcfce7; color: #166534; }
+  .bg-amber { background: #fef3c7; color: #92400e; }
+  .bg-red { background: #fee2e2; color: #991b1b; }
+  .bg-purple { background: #f3e8ff; color: #6b21a8; }
+  .bg-gray { background: #f1f5f9; color: #475569; }
+  .bg-teal { background: #ccfbf1; color: #115e59; }
+
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 800px) { .cols-2 { grid-template-columns: 1fr; } .toc ol { columns: 1; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Al-Minār — Complete Technical Reference</h1>
+  <div class="sub">Every construct, framework, pattern and code unit · Generated 15 Feb 2026</div>
+  <button class="print-btn no-print" onclick="window.print()">⬇ Save as PDF / Print</button>
+</header>
+
+<!-- ================================================================ TOC -->
+<div class="toc">
+<h2>Table of Contents</h2>
+<ol>
+  <li><a href="#s1">Project Stack &amp; Dependencies</a></li>
+  <li><a href="#s2">Project Structure &amp; File Map</a></li>
+  <li><a href="#s3">Settings &amp; Configuration</a></li>
+  <li><a href="#s4">Models (models.py)</a></li>
+  <li><a href="#s5">Serializers (serializers.py)</a></li>
+  <li><a href="#s6">Views &amp; ViewSets (views.py)</a></li>
+  <li><a href="#s7">URL Routing (urls.py)</a></li>
+  <li><a href="#s8">Service Layer (services.py)</a></li>
+  <li><a href="#s9">Admin Dashboard (admin.py)</a></li>
+  <li><a href="#s10">Management Commands</a></li>
+  <li><a href="#s11">API Endpoint Map</a></li>
+  <li><a href="#s12">Permission Matrix</a></li>
+  <li><a href="#s13">Business Rules Summary</a></li>
+  <li><a href="#s14">Django &amp; DRF Constructs Glossary</a></li>
+</ol>
+</div>
+
+
+<!-- ================================================================ 1 -->
+<div class="section" id="s1">
+<h2>1 · Project Stack &amp; Dependencies</h2>
+<div class="section-body">
+<p class="desc">All dependencies declared in <code>Pipfile</code>. Python 3.13, managed via Pipenv.</p>
+<table>
+<thead><tr><th>Package</th><th>Version</th><th>Role</th><th>Where Used</th></tr></thead>
+<tbody>
+<tr><td><code>django</code></td><td>5.2.6</td><td>Web framework — ORM, migrations, admin, URL routing, management commands</td><td>Everywhere</td></tr>
+<tr><td><code>djangorestframework</code></td><td>*</td><td>REST API toolkit — serializers, ViewSets, routers, permissions, pagination</td><td>serializers.py, views.py, urls.py, settings.py</td></tr>
+<tr><td><code>djangorestframework-simplejwt</code></td><td>*</td><td>JWT authentication — access &amp; refresh tokens</td><td>settings.py, minarAPI/urls.py</td></tr>
+<tr><td><code>django-filter</code></td><td>*</td><td>Declarative queryset filtering via URL query params</td><td>views.py (filter_backends), settings.py</td></tr>
+<tr><td><code>django-cors-headers</code></td><td>*</td><td>Cross-Origin Resource Sharing for React Native / web clients</td><td>settings.py (MIDDLEWARE, CORS_*)</td></tr>
+<tr><td><code>psycopg2-binary</code></td><td>*</td><td>PostgreSQL adapter (production DB driver)</td><td>settings.py DATABASES (when switching from SQLite)</td></tr>
+<tr><td><code>python-dotenv</code></td><td>*</td><td>Load environment variables from <code>.env</code> file</td><td>Available for SECRET_KEY, DB creds</td></tr>
+<tr><td><code>pillow</code></td><td>*</td><td>Image processing library (for future masjid images)</td><td>Not yet used — available</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<!-- ================================================================ 2 -->
+<div class="section" id="s2">
+<h2>2 · Project Structure &amp; File Map</h2>
+<div class="section-body">
+<table>
+<thead><tr><th>File / Directory</th><th>Lines</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>Pipfile</code></td><td>20</td><td>Dependency declaration (Pipenv)</td></tr>
+<tr><td><code>alMinar/minarAPI/manage.py</code></td><td>—</td><td>Django CLI entry point</td></tr>
+<tr><td><code>minarAPI/settings.py</code></td><td>180</td><td>Project configuration (DB, auth, DRF, CORS, JWT)</td></tr>
+<tr><td><code>minarAPI/urls.py</code></td><td>28</td><td>Root URL routing (admin, JWT, api-auth, app endpoints)</td></tr>
+<tr><td><code>minarAPI/wsgi.py</code></td><td>—</td><td>WSGI application entry point</td></tr>
+<tr><td><code>minarAPI/asgi.py</code></td><td>—</td><td>ASGI application entry point</td></tr>
+<tr><td><code>centralAPI/models.py</code></td><td>391</td><td>12 Django models — data schema</td></tr>
+<tr><td><code>centralAPI/serializers.py</code></td><td>198</td><td>12 DRF serializers — API data contracts</td></tr>
+<tr><td><code>centralAPI/views.py</code></td><td>275</td><td>12 ViewSets + 1 function view — API logic</td></tr>
+<tr><td><code>centralAPI/services.py</code></td><td>189</td><td>5 service functions — pure business logic</td></tr>
+<tr><td><code>centralAPI/admin.py</code></td><td>153</td><td>12 admin registrations + 6 inlines — admin dashboard</td></tr>
+<tr><td><code>centralAPI/urls.py</code></td><td>41</td><td>DRF router + verify endpoint — app URL routing</td></tr>
+<tr><td><code>centralAPI/apps.py</code></td><td>—</td><td>App configuration</td></tr>
+<tr><td><code>centralAPI/tests.py</code></td><td>1633</td><td>128 tests across 23 test classes</td></tr>
+<tr><td><code>centralAPI/management/commands/decay_confidence.py</code></td><td>25</td><td>Cron management command for confidence decay</td></tr>
+<tr><td><code>centralAPI/migrations/0001_initial.py</code></td><td>—</td><td>Initial DB migration</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<!-- ================================================================ 3 -->
+<div class="section" id="s3">
+<h2>3 · Settings &amp; Configuration</h2>
+<div class="section-body">
+
+<h3>3.1 · INSTALLED_APPS</h3>
+<table>
+<thead><tr><th>App</th><th>Type</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>django.contrib.admin</code></td><td>Built-in</td><td>Admin dashboard UI</td></tr>
+<tr><td><code>django.contrib.auth</code></td><td>Built-in</td><td>User model, authentication, permissions</td></tr>
+<tr><td><code>django.contrib.contenttypes</code></td><td>Built-in</td><td>Content type framework (required by auth)</td></tr>
+<tr><td><code>django.contrib.sessions</code></td><td>Built-in</td><td>Session framework (browsable API, admin)</td></tr>
+<tr><td><code>django.contrib.messages</code></td><td>Built-in</td><td>Flash messages (admin)</td></tr>
+<tr><td><code>django.contrib.staticfiles</code></td><td>Built-in</td><td>Static file serving</td></tr>
+<tr><td><code>rest_framework</code></td><td>Third-party</td><td>DRF — serializers, ViewSets, routers, browsable API</td></tr>
+<tr><td><code>django_filters</code></td><td>Third-party</td><td>Automatic queryset filtering from URL query params</td></tr>
+<tr><td><code>corsheaders</code></td><td>Third-party</td><td>CORS middleware for cross-origin mobile/web requests</td></tr>
+<tr><td><code>centralAPI</code></td><td>Local</td><td>The Al-Minār application</td></tr>
+</tbody>
+</table>
+
+<h3>3.2 · REST_FRAMEWORK Configuration</h3>
+<table>
+<thead><tr><th>Setting</th><th>Value</th><th>Effect</th></tr></thead>
+<tbody>
+<tr><td><code>DEFAULT_AUTHENTICATION_CLASSES</code></td><td><code>JWTAuthentication</code>, <code>SessionAuthentication</code></td><td>JWT tokens for API clients; session cookies for browsable API</td></tr>
+<tr><td><code>DEFAULT_PERMISSION_CLASSES</code></td><td><code>IsAuthenticatedOrReadOnly</code></td><td>Unauthenticated users can read; writes require auth. Overridden per-ViewSet.</td></tr>
+<tr><td><code>DEFAULT_FILTER_BACKENDS</code></td><td><code>DjangoFilterBackend</code>, <code>SearchFilter</code>, <code>OrderingFilter</code></td><td>Enables <code>?field=val</code>, <code>?search=text</code>, <code>?ordering=field</code></td></tr>
+<tr><td><code>DEFAULT_PAGINATION_CLASS</code></td><td><code>PageNumberPagination</code></td><td>Results wrapped in <code>{count, next, previous, results}</code></td></tr>
+<tr><td><code>PAGE_SIZE</code></td><td><code>25</code></td><td>25 results per page</td></tr>
+</tbody>
+</table>
+
+<h3>3.3 · SIMPLE_JWT Configuration</h3>
+<table>
+<thead><tr><th>Setting</th><th>Value</th><th>Effect</th></tr></thead>
+<tbody>
+<tr><td><code>ACCESS_TOKEN_LIFETIME</code></td><td>30 minutes</td><td>Short-lived token for API requests</td></tr>
+<tr><td><code>REFRESH_TOKEN_LIFETIME</code></td><td>7 days</td><td>Long-lived token to obtain new access tokens</td></tr>
+<tr><td><code>ROTATE_REFRESH_TOKENS</code></td><td><code>True</code></td><td>Each refresh returns a new refresh token (one-time use)</td></tr>
+<tr><td><code>BLACKLIST_AFTER_ROTATION</code></td><td><code>True</code></td><td>Old refresh tokens are blacklisted after rotation</td></tr>
+</tbody>
+</table>
+
+<h3>3.4 · CORS Configuration</h3>
+<table>
+<thead><tr><th>Setting</th><th>Value</th><th>Effect</th></tr></thead>
+<tbody>
+<tr><td><code>CORS_ALLOW_ALL_ORIGINS</code></td><td><code>DEBUG</code> (True in dev)</td><td>Allows all origins during development</td></tr>
+<tr><td><code>CORS_ALLOWED_ORIGINS</code></td><td><code>[]</code> (add production domains)</td><td>Whitelist for production origins</td></tr>
+<tr><td><code>CorsMiddleware</code></td><td>2nd in MIDDLEWARE</td><td>Must be above <code>CommonMiddleware</code> to add CORS headers before response</td></tr>
+</tbody>
+</table>
+
+<h3>3.5 · Database</h3>
+<table>
+<thead><tr><th>Setting</th><th>Dev Value</th><th>Production Plan</th></tr></thead>
+<tbody>
+<tr><td><code>ENGINE</code></td><td><code>django.db.backends.sqlite3</code></td><td><code>django.db.backends.postgresql</code></td></tr>
+<tr><td><code>NAME</code></td><td><code>db.sqlite3</code></td><td>PostgreSQL database name</td></tr>
+<tr><td>Driver</td><td>Built-in SQLite</td><td><code>psycopg2-binary</code></td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- ================================================================ 4 -->
+<div class="section" id="s4">
+<h2>4 · Models (models.py — 391 lines)</h2>
+<div class="section-body">
+<p class="desc">12 models. All public entities use UUID primary keys. All models inherit <code>created_at</code> / <code>updated_at</code> timestamps via abstract base classes.</p>
+
+<h3>4.1 · Abstract Base Classes</h3>
+<table>
+<thead><tr><th>Class</th><th>Fields</th><th>Purpose</th><th>Django Construct</th></tr></thead>
+<tbody>
+<tr><td><code>AbstractModel</code></td><td><code>created_at</code> <span class="badge bg-gray">auto_now_add</span>, <code>updated_at</code> <span class="badge bg-gray">auto_now</span></td><td>Timestamps inherited by every model</td><td><code>models.Model</code> with <code>class Meta: abstract = True</code></td></tr>
+<tr><td><code>AbstractUserModel</code></td><td><code>username</code> <span class="badge bg-blue">PK CharField</span>, <code>email</code> <span class="badge bg-green">unique EmailField</span></td><td>Base for both user types; username is the primary key</td><td>Inherits <code>AbstractModel</code>, <code>abstract = True</code></td></tr>
+</tbody>
+</table>
+
+<h3>4.2 · Concrete Models</h3>
+<table>
+<thead><tr><th>Model</th><th>PK</th><th>Fields</th><th>Relationships</th><th>Constraints</th></tr></thead>
+<tbody>
+<tr>
+  <td><code>AdminUser</code></td>
+  <td><code>username</code> <span class="badge bg-blue">CharField</span></td>
+  <td>email</td>
+  <td>Inherits AbstractUserModel</td>
+  <td>email: unique</td>
+</tr>
+<tr>
+  <td><code>RegularUser</code></td>
+  <td><code>username</code> <span class="badge bg-blue">CharField</span></td>
+  <td>email</td>
+  <td>Inherits AbstractUserModel</td>
+  <td>email: unique</td>
+</tr>
+<tr>
+  <td><code>Masjid</code></td>
+  <td><code>masjidID</code> <span class="badge bg-purple">UUIDField</span></td>
+  <td>name, description, isActive</td>
+  <td>FK → ConfidenceRecord (nullable), FK → LocationRecord (nullable)</td>
+  <td>isActive default True</td>
+</tr>
+<tr>
+  <td><code>ConfidenceRecord</code></td>
+  <td><code>crID</code> <span class="badge bg-purple">UUIDField</span></td>
+  <td>confidenceLevel (0-3), lastConfirmationDate, decayDate</td>
+  <td>FK → Masjid</td>
+  <td>CONFIDENCE_LEVELS choices, DECAY_DAYS class constant</td>
+</tr>
+<tr>
+  <td><code>LocationRecord</code></td>
+  <td><code>lrID</code> <span class="badge bg-purple">UUIDField</span></td>
+  <td>latitude, longitude, city, country, region</td>
+  <td>FK → Masjid</td>
+  <td>country: choices from 160+ countries list</td>
+</tr>
+<tr>
+  <td><code>PrayerTimeRecord</code></td>
+  <td><code>ptrID</code> <span class="badge bg-purple">UUIDField</span></td>
+  <td>modelType, isVariable, date, lastUpdated</td>
+  <td>FK → Masjid (<code>related_name="prayer_time_records"</code>)</td>
+  <td><code>unique_together = ("masjid", "date")</code>, <code>ordering = ["-date"]</code></td>
+</tr>
+<tr>
+  <td><code>Prayer</code></td>
+  <td><code>id</code> <span class="badge bg-gray">AutoField</span></td>
+  <td>name (fajr/dhuhr/asr/maghrib/isha)</td>
+  <td>—</td>
+  <td>name: unique, 5 choices</td>
+</tr>
+<tr>
+  <td><code>PrayerTime</code></td>
+  <td><code>prayerTimeID</code> <span class="badge bg-purple">UUIDField</span></td>
+  <td>adhan_time (nullable), iqama_time (nullable)</td>
+  <td>FK → PrayerTimeRecord (<code>related_name="prayers"</code>), FK → Prayer</td>
+  <td><code>unique_together = ("record", "prayer")</code>, <code>clean()</code> validates ≥1 time</td>
+</tr>
+<tr>
+  <td><code>Signal</code></td>
+  <td><code>signalID</code> <span class="badge bg-purple">UUIDField</span></td>
+  <td>signalType, sourceType, description</td>
+  <td>FK → Masjid, FK → RegularUser (nullable)</td>
+  <td>SIGNAL_TYPES: 4 choices, SOURCE_TYPES: 3 choices</td>
+</tr>
+<tr>
+  <td><code>VerifiedBadge</code></td>
+  <td><code>badgeID</code> <span class="badge bg-purple">UUIDField</span></td>
+  <td>token (unique UUID), issueDate, expiryDate, isActive, isRevoked, lastCheckedAt</td>
+  <td>FK → Masjid, FK → AdminUser</td>
+  <td>token: unique, editable=False</td>
+</tr>
+<tr>
+  <td><code>MasjidAdmin</code></td>
+  <td><code>masjidAdminID</code> <span class="badge bg-purple">UUIDField</span></td>
+  <td>verifiedIdentity, verifiedAt</td>
+  <td>FK → RegularUser, FK → Masjid</td>
+  <td><code>unique_together = ("user", "masjid")</code></td>
+</tr>
+<tr>
+  <td><code>FavouriteMasjid</code></td>
+  <td><code>favID</code> <span class="badge bg-purple">UUIDField</span></td>
+  <td>—</td>
+  <td>FK → RegularUser, FK → Masjid</td>
+  <td><code>unique_together = ("user", "masjid")</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>4.3 · Model Constants &amp; Choices</h3>
+<table>
+<thead><tr><th>Model</th><th>Constant</th><th>Values</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>ConfidenceRecord</code></td><td><code>CONFIDENCE_LEVELS</code></td><td><code>[(0,"C0 - Community Reported"), (1,"C1 - Community Confirmed"), (2,"C2 - Masjid Verified"), (3,"C3 - Actively Maintained")]</code></td><td>IntegerField choices — trust tier of a masjid</td></tr>
+<tr><td><code>ConfidenceRecord</code></td><td><code>DECAY_DAYS</code></td><td><code>{3: 90, 2: 180, 1: 365}</code></td><td>Days until each level decays to the next lower one</td></tr>
+<tr><td><code>PrayerTimeRecord</code></td><td><code>MODEL_TYPE_CHOICES</code></td><td><code>FULL_TIMETABLE, IQAMA_ONLY, ADHAN_ONLY, UNKNOWN</code></td><td>What kind of prayer data the masjid provides</td></tr>
+<tr><td><code>Prayer</code></td><td><code>PRAYER_CHOICES</code></td><td><code>fajr, dhuhr, asr, maghrib, isha</code></td><td>The five daily prayers</td></tr>
+<tr><td><code>Signal</code></td><td><code>SIGNAL_TYPES</code></td><td><code>PRAYED, JUMMAH, ACTIVE, ADMIN_VERIFY</code></td><td>What action the signal represents</td></tr>
+<tr><td><code>Signal</code></td><td><code>SOURCE_TYPES</code></td><td><code>USER, ADMIN, SYSTEM</code></td><td>Who originated the signal</td></tr>
+</tbody>
+</table>
+
+<h3>4.4 · Field Type Reference</h3>
+<table>
+<thead><tr><th>Django Field</th><th>Used In</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)</code></td><td>Masjid, ConfidenceRecord, LocationRecord, PrayerTimeRecord, PrayerTime, Signal, VerifiedBadge, MasjidAdmin, FavouriteMasjid</td><td>Globally unique, non-sequential, non-guessable primary keys</td></tr>
+<tr><td><code>models.CharField(primary_key=True)</code></td><td>AdminUser, RegularUser</td><td>Username as PK (natural key)</td></tr>
+<tr><td><code>models.DateTimeField(auto_now_add=True)</code></td><td>created_at, issueDate</td><td>Set once on creation, never changes</td></tr>
+<tr><td><code>models.DateTimeField(auto_now=True)</code></td><td>updated_at, lastConfirmationDate, lastUpdated</td><td>Auto-updates on every <code>.save()</code></td></tr>
+<tr><td><code>models.ForeignKey(..., on_delete=models.CASCADE)</code></td><td>All FKs</td><td>Deleting the parent deletes related children</td></tr>
+<tr><td><code>models.BooleanField(default=True/False)</code></td><td>isActive, isVariable, isRevoked, verifiedIdentity</td><td>Toggle flags with sensible defaults</td></tr>
+<tr><td><code>models.TextField(blank=True, null=True)</code></td><td>description</td><td>Optional long text</td></tr>
+<tr><td><code>models.TimeField(blank=True, null=True)</code></td><td>adhan_time, iqama_time</td><td>Nullable time-of-day — enables different prayer schemas</td></tr>
+<tr><td><code>models.FloatField()</code></td><td>latitude, longitude</td><td>GPS coordinates</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- ================================================================ 5 -->
+<div class="section" id="s5">
+<h2>5 · Serializers (serializers.py — 198 lines)</h2>
+<div class="section-body">
+<p class="desc">12 ModelSerializers. Each declares explicit <code>fields</code> and <code>read_only_fields</code>. Two advanced patterns: nested serializers and split read/write fields.</p>
+
+<table>
+<thead><tr><th>Serializer</th><th>Model</th><th>Fields</th><th>Read-Only Fields</th><th>Special Patterns</th></tr></thead>
+<tbody>
+<tr><td><code>AdminUserSerializer</code></td><td>AdminUser</td><td>username, email, created_at, updated_at</td><td>created_at, updated_at</td><td>—</td></tr>
+<tr><td><code>RegularUserSerializer</code></td><td>RegularUser</td><td>username, email, created_at, updated_at</td><td>created_at, updated_at</td><td>—</td></tr>
+<tr><td><code>ConfidenceRecordSerializer</code></td><td>ConfidenceRecord</td><td>crID, confidenceLevel, masjid, lastConfirmationDate, decayDate, timestamps</td><td>crID, lastConfirmationDate, timestamps</td><td>—</td></tr>
+<tr><td><code>LocationRecordSerializer</code></td><td>LocationRecord</td><td>lrID, latitude, longitude, masjid, city, country, region, timestamps</td><td>lrID, timestamps</td><td>—</td></tr>
+<tr><td><code>MasjidSerializer</code></td><td>Masjid</td><td>masjidID, name, description, isActive, confidenceRecord, locationRecord, timestamps</td><td>masjidID, timestamps</td><td><span class="badge bg-green">Nested</span> ConfidenceRecordSerializer + LocationRecordSerializer (read_only=True)</td></tr>
+<tr><td><code>PrayerSerializer</code></td><td>Prayer</td><td>id, name, timestamps</td><td>id, timestamps</td><td>—</td></tr>
+<tr><td><code>PrayerTimeSerializer</code></td><td>PrayerTime</td><td>prayerTimeID, record, prayer, prayer_id, adhan_time, iqama_time, timestamps</td><td>prayerTimeID, timestamps</td><td><span class="badge bg-amber">Split read/write</span> — <code>prayer</code> (nested, read) + <code>prayer_id</code> (PrimaryKeyRelatedField, write). Custom <code>validate()</code> ensures ≥1 time.</td></tr>
+<tr><td><code>PrayerTimeRecordSerializer</code></td><td>PrayerTimeRecord</td><td>ptrID, masjid, modelType, isVariable, date, lastUpdated, prayers, timestamps</td><td>ptrID, lastUpdated, timestamps</td><td><span class="badge bg-green">Nested</span> <code>prayers = PrayerTimeSerializer(many=True, read_only=True)</code></td></tr>
+<tr><td><code>SignalSerializer</code></td><td>Signal</td><td>signalID, masjid, user, signalType, sourceType, description, timestamps</td><td>signalID, timestamps</td><td>—</td></tr>
+<tr><td><code>VerifiedBadgeSerializer</code></td><td>VerifiedBadge</td><td>badgeID, token, masjid, issuedBy, issueDate, expiryDate, isActive, isRevoked, lastCheckedAt, timestamps</td><td>badgeID, token, issueDate, timestamps</td><td>token is read-only — auto-generated, never settable</td></tr>
+<tr><td><code>MasjidAdminSerializer</code></td><td>MasjidAdmin</td><td>masjidAdminID, user, masjid, verifiedIdentity, verifiedAt, timestamps</td><td>masjidAdminID, verifiedAt, timestamps</td><td>—</td></tr>
+<tr><td><code>FavouriteMasjidSerializer</code></td><td>FavouriteMasjid</td><td>favID, user, masjid, timestamps</td><td>favID, timestamps</td><td>—</td></tr>
+</tbody>
+</table>
+
+<h3>5.1 · Serializer Patterns Used</h3>
+<table>
+<thead><tr><th>Pattern</th><th>What It Does</th><th>Where Used</th></tr></thead>
+<tbody>
+<tr><td><span class="badge bg-green">Nested Serializer</span></td><td>Embeds related object's full data inside the parent's JSON output instead of just a PK/ID</td><td><code>MasjidSerializer</code> nests Confidence + Location; <code>PrayerTimeRecordSerializer</code> nests PrayerTimes</td></tr>
+<tr><td><span class="badge bg-amber">Split Read/Write</span></td><td>Different field representations for reads vs writes. Read shows nested object; write accepts a PK.</td><td><code>PrayerTimeSerializer</code>: <code>prayer</code> (read, nested) + <code>prayer_id</code> (write, PK)</td></tr>
+<tr><td><span class="badge bg-blue">read_only_fields</span></td><td>Fields included in output but ignored in input — prevents clients from setting auto-generated values</td><td>All serializers — UUIDs, timestamps, tokens</td></tr>
+<tr><td><span class="badge bg-red">Custom validate()</span></td><td>Cross-field validation logic in the serializer</td><td><code>PrayerTimeSerializer.validate()</code> — at least one time must be provided</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- ================================================================ 6 -->
+<div class="section" id="s6">
+<h2>6 · Views &amp; ViewSets (views.py — 275 lines)</h2>
+<div class="section-body">
+<p class="desc">11 ViewSets (10 ModelViewSet + 1 ReadOnlyModelViewSet) and 1 function-based view. Each ViewSet provides full CRUD endpoints automatically.</p>
+
+<table>
+<thead><tr><th>ViewSet / View</th><th>Model</th><th>Base Class</th><th>Permission Strategy</th><th>Features</th></tr></thead>
+<tbody>
+<tr><td><code>AdminUserViewSet</code></td><td>AdminUser</td><td>ModelViewSet</td><td><code>IsAdminUser</code> (all actions)</td><td>—</td></tr>
+<tr><td><code>RegularUserViewSet</code></td><td>RegularUser</td><td>ModelViewSet</td><td><code>IsAuthenticated</code> (all actions)</td><td>—</td></tr>
+<tr><td><code>MasjidViewSet</code></td><td>Masjid</td><td>ModelViewSet</td><td><code>get_permissions()</code>: list/retrieve/actions → AllowAny; create/update/delete → IsAuthenticated</td><td><code>select_related</code>, search (name, description), filter (isActive), ordering (name, created_at), 3 custom <code>@action</code>s</td></tr>
+<tr><td><code>ConfidenceRecordViewSet</code></td><td>ConfidenceRecord</td><td>ModelViewSet</td><td>list/retrieve → AllowAny; write → IsAdminUser</td><td>Filter: confidenceLevel, masjid</td></tr>
+<tr><td><code>LocationRecordViewSet</code></td><td>LocationRecord</td><td>ModelViewSet</td><td>list/retrieve → AllowAny; write → IsAuthenticated</td><td>Search: city, region, country. Filter: country, city, masjid</td></tr>
+<tr><td><code>PrayerViewSet</code></td><td>Prayer</td><td><span class="badge bg-teal">ReadOnlyModelViewSet</span></td><td><code>AllowAny</code> (all actions)</td><td>Lookup table — no create/update/delete</td></tr>
+<tr><td><code>PrayerTimeRecordViewSet</code></td><td>PrayerTimeRecord</td><td>ModelViewSet</td><td>list/retrieve → AllowAny; write → IsAuthenticated</td><td>Filter: masjid, modelType, date. Ordering: date. <code>prefetch_related("prayers__prayer")</code></td></tr>
+<tr><td><code>PrayerTimeViewSet</code></td><td>PrayerTime</td><td>ModelViewSet</td><td>list/retrieve → AllowAny; write → IsAuthenticated</td><td>Filter: record, prayer</td></tr>
+<tr><td><code>SignalViewSet</code></td><td>Signal</td><td>ModelViewSet</td><td>list/retrieve → AllowAny; write → IsAuthenticated</td><td>Filter: masjid, signalType, sourceType, user. <span class="badge bg-red">perform_create()</span> calls <code>process_signal()</code></td></tr>
+<tr><td><code>VerifiedBadgeViewSet</code></td><td>VerifiedBadge</td><td>ModelViewSet</td><td>list/retrieve → AllowAny; write → IsAdminUser</td><td>Filter: masjid, isActive, isRevoked. Custom <code>@action revoke</code></td></tr>
+<tr><td><code>MasjidAdminViewSet</code></td><td>MasjidAdmin</td><td>ModelViewSet</td><td><code>IsAuthenticated</code> (all actions)</td><td>Filter: masjid, user, verifiedIdentity</td></tr>
+<tr><td><code>FavouriteMasjidViewSet</code></td><td>FavouriteMasjid</td><td>ModelViewSet</td><td><code>IsAuthenticated</code> (all actions)</td><td>Filter: user, masjid. Custom <code>get_queryset()</code></td></tr>
+<tr><td><code>verify_badge()</code></td><td>VerifiedBadge</td><td><span class="badge bg-amber">@api_view</span></td><td><code>AllowAny</code></td><td>Function-based view. Updates lastCheckedAt, calls <code>check_badge_validity()</code></td></tr>
+</tbody>
+</table>
+
+<h3>6.1 · Custom Actions</h3>
+<table>
+<thead><tr><th>ViewSet</th><th>Action</th><th>Method</th><th>URL Pattern</th><th>Logic</th></tr></thead>
+<tbody>
+<tr><td><code>MasjidViewSet</code></td><td><code>prayer_times</code></td><td>GET</td><td><code>/api/masjids/{id}/prayer_times/</code></td><td>Filters PrayerTimeRecord by masjid, prefetches prayers</td></tr>
+<tr><td><code>MasjidViewSet</code></td><td><code>signals</code></td><td>GET</td><td><code>/api/masjids/{id}/signals/</code></td><td>Filters Signal by masjid, orders by -created_at</td></tr>
+<tr><td><code>MasjidViewSet</code></td><td><code>badges</code></td><td>GET</td><td><code>/api/masjids/{id}/badges/</code></td><td>Filters VerifiedBadge by masjid</td></tr>
+<tr><td><code>VerifiedBadgeViewSet</code></td><td><code>revoke</code></td><td>POST</td><td><code>/api/badges/{id}/revoke/</code></td><td>Sets isActive=False, isRevoked=True, saves, returns serialized badge</td></tr>
+</tbody>
+</table>
+
+<h3>6.2 · View Patterns Used</h3>
+<table>
+<thead><tr><th>Pattern</th><th>Construct</th><th>What It Does</th></tr></thead>
+<tbody>
+<tr><td><code>get_permissions()</code></td><td>Method override</td><td>Returns different permission classes based on <code>self.action</code> (list, retrieve, create, etc.)</td></tr>
+<tr><td><code>perform_create()</code></td><td>Method override</td><td>Hook called after serializer validation but during save — used to run <code>process_signal()</code></td></tr>
+<tr><td><code>get_queryset()</code></td><td>Method override</td><td>Returns custom queryset — used in FavouriteMasjidViewSet for select_related</td></tr>
+<tr><td><code>select_related()</code></td><td>QuerySet method</td><td>SQL JOIN — fetches FK objects in one query (avoids N+1 for single FKs)</td></tr>
+<tr><td><code>prefetch_related()</code></td><td>QuerySet method</td><td>Separate query + Python join — fetches reverse FK / M2M in bulk (avoids N+1 for collections)</td></tr>
+<tr><td><code>@action(detail=True)</code></td><td>DRF decorator</td><td>Creates a custom endpoint nested under a single object: <code>/resource/{pk}/action_name/</code></td></tr>
+<tr><td><code>@api_view(["GET"])</code></td><td>DRF decorator</td><td>Turns a plain function into a DRF view with request parsing, response rendering, exception handling</td></tr>
+<tr><td><code>save(update_fields=[...])</code></td><td>Django ORM</td><td>Only updates specified columns — more efficient, avoids race conditions</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- ================================================================ 7 -->
+<div class="section" id="s7">
+<h2>7 · URL Routing</h2>
+<div class="section-body">
+
+<h3>7.1 · Root URLs (minarAPI/urls.py)</h3>
+<table>
+<thead><tr><th>Pattern</th><th>View</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>admin/</code></td><td><code>admin.site.urls</code></td><td>Django admin dashboard</td></tr>
+<tr><td><code>api/token/</code></td><td><code>TokenObtainPairView</code></td><td>POST: username + password → access + refresh JWT tokens</td></tr>
+<tr><td><code>api/token/refresh/</code></td><td><code>TokenRefreshView</code></td><td>POST: refresh token → new access token</td></tr>
+<tr><td><code>api-auth/</code></td><td><code>rest_framework.urls</code></td><td>DRF browsable API login/logout (development)</td></tr>
+<tr><td><code>api/</code></td><td><code>include("centralAPI.urls")</code></td><td>All application endpoints</td></tr>
+</tbody>
+</table>
+
+<h3>7.2 · App URLs (centralAPI/urls.py)</h3>
+<p class="desc">Uses DRF's <code>DefaultRouter</code> — automatically generates list, detail, and action URLs for each ViewSet.</p>
+<table>
+<thead><tr><th>Registration</th><th>URL Prefix</th><th>Auto-Generated Endpoints</th></tr></thead>
+<tbody>
+<tr><td><code>router.register("admin-users", AdminUserViewSet)</code></td><td><code>/api/admin-users/</code></td><td>list, create, retrieve, update, partial_update, destroy</td></tr>
+<tr><td><code>router.register("users", RegularUserViewSet)</code></td><td><code>/api/users/</code></td><td>list, create, retrieve, update, partial_update, destroy</td></tr>
+<tr><td><code>router.register("masjids", MasjidViewSet)</code></td><td><code>/api/masjids/</code></td><td>CRUD + <code>{id}/prayer_times/</code>, <code>{id}/signals/</code>, <code>{id}/badges/</code></td></tr>
+<tr><td><code>router.register("confidence-records", ...)</code></td><td><code>/api/confidence-records/</code></td><td>list, create, retrieve, update, partial_update, destroy</td></tr>
+<tr><td><code>router.register("location-records", ...)</code></td><td><code>/api/location-records/</code></td><td>list, create, retrieve, update, partial_update, destroy</td></tr>
+<tr><td><code>router.register("prayer-time-records", ...)</code></td><td><code>/api/prayer-time-records/</code></td><td>list, create, retrieve, update, partial_update, destroy</td></tr>
+<tr><td><code>router.register("prayers", PrayerViewSet)</code></td><td><code>/api/prayers/</code></td><td>list, retrieve (ReadOnly — no create/update/delete)</td></tr>
+<tr><td><code>router.register("prayer-times", ...)</code></td><td><code>/api/prayer-times/</code></td><td>list, create, retrieve, update, partial_update, destroy</td></tr>
+<tr><td><code>router.register("signals", SignalViewSet)</code></td><td><code>/api/signals/</code></td><td>list, create, retrieve, update, partial_update, destroy</td></tr>
+<tr><td><code>router.register("badges", ...)</code></td><td><code>/api/badges/</code></td><td>CRUD + <code>{id}/revoke/</code></td></tr>
+<tr><td><code>router.register("masjid-admins", ...)</code></td><td><code>/api/masjid-admins/</code></td><td>list, create, retrieve, update, partial_update, destroy</td></tr>
+<tr><td><code>router.register("favourites", ...)</code></td><td><code>/api/favourites/</code></td><td>list, create, retrieve, update, partial_update, destroy</td></tr>
+<tr><td><code>path("verify/&lt;uuid:token&gt;/", verify_badge)</code></td><td><code>/api/verify/{token}/</code></td><td>GET — public badge verification</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- ================================================================ 8 -->
+<div class="section" id="s8">
+<h2>8 · Service Layer (services.py — 189 lines)</h2>
+<div class="section-body">
+<p class="desc">Pure business logic functions — no HTTP, no serializers. Called by views (<code>perform_create</code>, <code>verify_badge</code>) and management commands.</p>
+
+<table>
+<thead><tr><th>Function</th><th>Signature</th><th>Input</th><th>Output</th><th>Business Rules</th></tr></thead>
+<tbody>
+<tr>
+  <td><code>calculate_decay_date</code></td>
+  <td><code>(confidence_level) → datetime | None</code></td>
+  <td>Integer 0–3</td>
+  <td>Future datetime or None</td>
+  <td>Looks up <code>DECAY_DAYS[level]</code> → adds that many days to <code>now()</code>. Level 0 returns None (no further decay).</td>
+</tr>
+<tr>
+  <td><code>_count_unique_signal_users</code></td>
+  <td><code>(masjid, days=30) → int</code></td>
+  <td>Masjid instance</td>
+  <td>Count of distinct users</td>
+  <td>Queries <code>Signal</code> table for USER signals within window, excludes null users, counts distinct user PKs.</td>
+</tr>
+<tr>
+  <td><code>process_signal</code></td>
+  <td><code>(signal) → ConfidenceRecord</code></td>
+  <td>Signal instance (just saved)</td>
+  <td>ConfidenceRecord (created or updated)</td>
+  <td>
+    <strong>ADMIN</strong>: if level &lt; 2 → set 2; if ≥ 2 → set 3. Set decayDate.<br>
+    <strong>USER</strong>: count unique users in 30d; if ≥ 3 and level &lt; 1 → set 1. Set decayDate.<br>
+    <strong>SYSTEM</strong>: no-op.<br>
+    Auto-creates ConfidenceRecord via <code>get_or_create</code> if none exists.
+  </td>
+</tr>
+<tr>
+  <td><code>decay_confidence</code></td>
+  <td><code>(record) → bool</code></td>
+  <td>ConfidenceRecord instance</td>
+  <td>True if decayed, False if not</td>
+  <td>Guard: level ≤ 0 → False. decayDate None → False. decayDate in future → False.<br>Otherwise: level -= 1, set new decayDate, save.</td>
+</tr>
+<tr>
+  <td><code>decay_all_confidence</code></td>
+  <td><code>() → int</code></td>
+  <td>—</td>
+  <td>Count of records decayed</td>
+  <td>Queries all records where <code>decayDate ≤ now</code> and <code>level &gt; 0</code>. Calls <code>decay_confidence()</code> on each.</td>
+</tr>
+<tr>
+  <td><code>check_badge_validity</code></td>
+  <td><code>(badge) → bool</code></td>
+  <td>VerifiedBadge instance</td>
+  <td>True if valid, False if not</td>
+  <td>
+    Immediate False: isRevoked or not isActive.<br>
+    Auto-deactivate (set isActive=False, save): expiryDate passed, masjid inactive, confidence &lt; C2, no confidence record.<br>
+    Otherwise: True.
+  </td>
+</tr>
+</tbody>
+</table>
+
+<h3>8.1 · Constants</h3>
+<table>
+<thead><tr><th>Constant</th><th>Value</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>MIN_COMMUNITY_SIGNALS</code></td><td><code>3</code></td><td>Minimum unique users signalling within the window to upgrade C0 → C1</td></tr>
+<tr><td><code>COMMUNITY_SIGNAL_WINDOW_DAYS</code></td><td><code>30</code></td><td>Look-back window in days for counting community signals</td></tr>
+</tbody>
+</table>
+
+<h3>8.2 · Integration Points</h3>
+<table>
+<thead><tr><th>Caller</th><th>Function Called</th><th>Trigger</th></tr></thead>
+<tbody>
+<tr><td><code>SignalViewSet.perform_create()</code></td><td><code>process_signal(signal)</code></td><td>Every time a new Signal is created via POST</td></tr>
+<tr><td><code>verify_badge()</code> view</td><td><code>check_badge_validity(badge)</code></td><td>Every time someone hits GET <code>/api/verify/{token}/</code></td></tr>
+<tr><td><code>decay_confidence</code> management command</td><td><code>decay_all_confidence()</code></td><td>Scheduled via cron or Celery beat</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- ================================================================ 9 -->
+<div class="section" id="s9">
+<h2>9 · Admin Dashboard (admin.py — 153 lines)</h2>
+<div class="section-body">
+
+<h3>9.1 · Inline Classes</h3>
+<table>
+<thead><tr><th>Inline</th><th>Type</th><th>Model</th><th>Parent</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>ConfidenceRecordInline</code></td><td>StackedInline</td><td>ConfidenceRecord</td><td>Masjid</td><td>Edit confidence record from masjid page — full width form</td></tr>
+<tr><td><code>LocationRecordInline</code></td><td>StackedInline</td><td>LocationRecord</td><td>Masjid</td><td>Edit location from masjid page — full width form</td></tr>
+<tr><td><code>PrayerTimeInline</code></td><td>TabularInline</td><td>PrayerTime</td><td>PrayerTimeRecord</td><td>Edit prayer times from record page — compact table rows</td></tr>
+<tr><td><code>SignalInline</code></td><td>TabularInline</td><td>Signal</td><td>Masjid</td><td>View signals from masjid page</td></tr>
+<tr><td><code>VerifiedBadgeInline</code></td><td>TabularInline</td><td>VerifiedBadge</td><td>Masjid</td><td>View/edit badges from masjid page</td></tr>
+<tr><td><code>MasjidAdminInline</code></td><td>TabularInline</td><td>MasjidAdmin</td><td>Masjid</td><td>View/edit masjid admins from masjid page</td></tr>
+</tbody>
+</table>
+
+<h3>9.2 · ModelAdmin Registrations</h3>
+<table>
+<thead><tr><th>Admin Class</th><th>Model</th><th>list_display</th><th>list_filter</th><th>search_fields</th><th>Inlines</th></tr></thead>
+<tbody>
+<tr><td><code>AdminUserAdmin</code></td><td>AdminUser</td><td>username, email, created_at</td><td>—</td><td>username, email</td><td>—</td></tr>
+<tr><td><code>RegularUserAdmin</code></td><td>RegularUser</td><td>username, email, created_at</td><td>—</td><td>username, email</td><td>—</td></tr>
+<tr><td><code>MasjidModelAdmin</code></td><td>Masjid</td><td>name, masjidID, isActive, confidenceRecord, created_at</td><td>isActive</td><td>name, description</td><td>5 inlines (Confidence, Location, Signal, Badge, MasjidAdmin)</td></tr>
+<tr><td><code>ConfidenceRecordAdmin</code></td><td>ConfidenceRecord</td><td>masjid, confidenceLevel, lastConfirmationDate, decayDate</td><td>confidenceLevel</td><td>masjid__name</td><td>—</td></tr>
+<tr><td><code>LocationRecordAdmin</code></td><td>LocationRecord</td><td>masjid, city, country, latitude, longitude</td><td>country</td><td>masjid__name, city, region</td><td>—</td></tr>
+<tr><td><code>PrayerTimeRecordAdmin</code></td><td>PrayerTimeRecord</td><td>masjid, date, modelType, isVariable, lastUpdated</td><td>modelType, isVariable, date</td><td>masjid__name</td><td>PrayerTimeInline</td></tr>
+<tr><td><code>PrayerAdmin</code></td><td>Prayer</td><td>name</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td><code>PrayerTimeAdmin</code></td><td>PrayerTime</td><td>prayer, record, adhan_time, iqama_time</td><td>prayer</td><td>—</td><td>—</td></tr>
+<tr><td><code>SignalAdmin</code></td><td>Signal</td><td>masjid, signalType, sourceType, user, created_at</td><td>signalType, sourceType</td><td>masjid__name, user__username</td><td>—</td></tr>
+<tr><td><code>VerifiedBadgeAdmin</code></td><td>VerifiedBadge</td><td>masjid, token, isActive, isRevoked, issueDate, expiryDate</td><td>isActive, isRevoked</td><td>masjid__name</td><td>—</td></tr>
+<tr><td><code>MasjidAdminAdmin</code></td><td>MasjidAdmin</td><td>user, masjid, verifiedIdentity, verifiedAt</td><td>verifiedIdentity</td><td>user__username, masjid__name</td><td>—</td></tr>
+<tr><td><code>FavouriteMasjidAdmin</code></td><td>FavouriteMasjid</td><td>user, masjid, created_at</td><td>—</td><td>user__username, masjid__name</td><td>—</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- ================================================================ 10 -->
+<div class="section" id="s10">
+<h2>10 · Management Commands</h2>
+<div class="section-body">
+<table>
+<thead><tr><th>Command</th><th>File</th><th>Usage</th><th>Logic</th><th>Output</th></tr></thead>
+<tbody>
+<tr>
+  <td><code>decay_confidence</code></td>
+  <td><code>management/commands/decay_confidence.py</code></td>
+  <td><code>python manage.py decay_confidence</code></td>
+  <td>Extends <code>BaseCommand</code>. Calls <code>decay_all_confidence()</code> from services.py. Intended for cron/Celery beat scheduling.</td>
+  <td><code style="color:green">Decayed N confidence record(s).</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>10.1 · Command Structure</h3>
+<table>
+<thead><tr><th>Construct</th><th>What It Is</th><th>What It Does</th></tr></thead>
+<tbody>
+<tr><td><code>BaseCommand</code></td><td>Django management command base class</td><td>Provides argument parsing, stdout/stderr, colored output via <code>self.style</code></td></tr>
+<tr><td><code>Command.help</code></td><td>Class attribute</td><td>Help text shown when running <code>python manage.py help decay_confidence</code></td></tr>
+<tr><td><code>handle()</code></td><td>Required method override</td><td>Entry point — called when the command runs</td></tr>
+<tr><td><code>self.style.SUCCESS()</code></td><td>Output formatter</td><td>Wraps text in green color for terminal output</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<!-- ================================================================ 11 -->
+<div class="section" id="s11">
+<h2>11 · Complete API Endpoint Map</h2>
+<div class="section-body">
+<p class="desc">Every endpoint auto-generated by the DRF router + manually defined routes. All prefixed with <code>/api/</code>.</p>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>Action</th><th>Auth</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>POST</td><td><code>/api/token/</code></td><td>obtain_pair</td><td>None</td><td>Username + password → access + refresh JWT</td></tr>
+<tr><td>POST</td><td><code>/api/token/refresh/</code></td><td>refresh</td><td>None</td><td>Refresh token → new access token</td></tr>
+<tr><td colspan="5" style="background:#f1f5f9; font-weight:600">Masjids</td></tr>
+<tr><td>GET</td><td><code>/api/masjids/</code></td><td>list</td><td>Public</td><td>List all masjids (paginated, searchable, filterable)</td></tr>
+<tr><td>POST</td><td><code>/api/masjids/</code></td><td>create</td><td>Auth</td><td>Create a new masjid</td></tr>
+<tr><td>GET</td><td><code>/api/masjids/{id}/</code></td><td>retrieve</td><td>Public</td><td>Get a single masjid with nested confidence + location</td></tr>
+<tr><td>PUT/PATCH</td><td><code>/api/masjids/{id}/</code></td><td>update</td><td>Auth</td><td>Update masjid fields</td></tr>
+<tr><td>DELETE</td><td><code>/api/masjids/{id}/</code></td><td>destroy</td><td>Auth</td><td>Delete a masjid</td></tr>
+<tr><td>GET</td><td><code>/api/masjids/{id}/prayer_times/</code></td><td>prayer_times</td><td>Public</td><td>Prayer time records for this masjid</td></tr>
+<tr><td>GET</td><td><code>/api/masjids/{id}/signals/</code></td><td>signals</td><td>Public</td><td>Signals for this masjid</td></tr>
+<tr><td>GET</td><td><code>/api/masjids/{id}/badges/</code></td><td>badges</td><td>Public</td><td>Verified badges for this masjid</td></tr>
+<tr><td colspan="5" style="background:#f1f5f9; font-weight:600">Confidence Records</td></tr>
+<tr><td>GET</td><td><code>/api/confidence-records/</code></td><td>list</td><td>Public</td><td>List all confidence records</td></tr>
+<tr><td>POST</td><td><code>/api/confidence-records/</code></td><td>create</td><td>Admin</td><td>Create confidence record</td></tr>
+<tr><td>GET</td><td><code>/api/confidence-records/{id}/</code></td><td>retrieve</td><td>Public</td><td>Get single record</td></tr>
+<tr><td>PUT/PATCH</td><td><code>/api/confidence-records/{id}/</code></td><td>update</td><td>Admin</td><td>Update record</td></tr>
+<tr><td>DELETE</td><td><code>/api/confidence-records/{id}/</code></td><td>destroy</td><td>Admin</td><td>Delete record</td></tr>
+<tr><td colspan="5" style="background:#f1f5f9; font-weight:600">Location Records</td></tr>
+<tr><td>GET</td><td><code>/api/location-records/</code></td><td>list</td><td>Public</td><td>List locations (searchable by city/region/country)</td></tr>
+<tr><td>POST</td><td><code>/api/location-records/</code></td><td>create</td><td>Auth</td><td>Add a location</td></tr>
+<tr><td>GET/PUT/PATCH/DELETE</td><td><code>/api/location-records/{id}/</code></td><td>detail ops</td><td>Read: Public, Write: Auth</td><td>CRUD on single record</td></tr>
+<tr><td colspan="5" style="background:#f1f5f9; font-weight:600">Prayers &amp; Prayer Times</td></tr>
+<tr><td>GET</td><td><code>/api/prayers/</code></td><td>list</td><td>Public</td><td>Read-only lookup: Fajr, Dhuhr, Asr, Maghrib, Isha</td></tr>
+<tr><td>GET</td><td><code>/api/prayer-time-records/</code></td><td>list</td><td>Public</td><td>List prayer time records (filterable by masjid, modelType, date)</td></tr>
+<tr><td>POST</td><td><code>/api/prayer-time-records/</code></td><td>create</td><td>Auth</td><td>Create a prayer time record for a date</td></tr>
+<tr><td>GET</td><td><code>/api/prayer-times/</code></td><td>list</td><td>Public</td><td>List individual prayer times</td></tr>
+<tr><td>POST</td><td><code>/api/prayer-times/</code></td><td>create</td><td>Auth</td><td>Add a prayer time (adhan and/or iqama) to a record</td></tr>
+<tr><td colspan="5" style="background:#f1f5f9; font-weight:600">Signals</td></tr>
+<tr><td>GET</td><td><code>/api/signals/</code></td><td>list</td><td>Public</td><td>List signals (filterable)</td></tr>
+<tr><td>POST</td><td><code>/api/signals/</code></td><td>create</td><td>Auth</td><td>Create signal → triggers <code>process_signal()</code> for confidence upgrade</td></tr>
+<tr><td colspan="5" style="background:#f1f5f9; font-weight:600">Badges</td></tr>
+<tr><td>GET</td><td><code>/api/badges/</code></td><td>list</td><td>Public</td><td>List badges</td></tr>
+<tr><td>POST</td><td><code>/api/badges/</code></td><td>create</td><td>Admin</td><td>Issue a badge</td></tr>
+<tr><td>POST</td><td><code>/api/badges/{id}/revoke/</code></td><td>revoke</td><td>Admin</td><td>Revoke a badge</td></tr>
+<tr><td>GET</td><td><code>/api/verify/{token}/</code></td><td>verify_badge</td><td>Public</td><td>Public verification — checks validity, updates lastCheckedAt</td></tr>
+<tr><td colspan="5" style="background:#f1f5f9; font-weight:600">Masjid Admins &amp; Favourites</td></tr>
+<tr><td>GET/POST</td><td><code>/api/masjid-admins/</code></td><td>list/create</td><td>Auth</td><td>Manage masjid admin registrations</td></tr>
+<tr><td>GET/POST</td><td><code>/api/favourites/</code></td><td>list/create</td><td>Auth</td><td>Mark/list favourite masjids</td></tr>
+<tr><td>DELETE</td><td><code>/api/favourites/{id}/</code></td><td>destroy</td><td>Auth</td><td>Remove a favourite (unfavourite)</td></tr>
+<tr><td colspan="5" style="background:#f1f5f9; font-weight:600">Users</td></tr>
+<tr><td>GET/POST</td><td><code>/api/admin-users/</code></td><td>list/create</td><td>Admin</td><td>Manage admin user accounts</td></tr>
+<tr><td>GET/POST</td><td><code>/api/users/</code></td><td>list/create</td><td>Auth</td><td>Manage regular user accounts</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<!-- ================================================================ 12 -->
+<div class="section" id="s12">
+<h2>12 · Permission Matrix</h2>
+<div class="section-body">
+<table>
+<thead><tr><th>Resource</th><th>List/Retrieve</th><th>Create</th><th>Update</th><th>Delete</th><th>Custom Actions</th></tr></thead>
+<tbody>
+<tr><td>Masjid</td><td><span class="badge bg-green">Public</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-green">Public</span> (prayer_times, signals, badges)</td></tr>
+<tr><td>ConfidenceRecord</td><td><span class="badge bg-green">Public</span></td><td><span class="badge bg-red">Admin</span></td><td><span class="badge bg-red">Admin</span></td><td><span class="badge bg-red">Admin</span></td><td>—</td></tr>
+<tr><td>LocationRecord</td><td><span class="badge bg-green">Public</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td>—</td></tr>
+<tr><td>Prayer</td><td><span class="badge bg-green">Public</span></td><td colspan="3" style="text-align:center"><span class="badge bg-gray">ReadOnly — blocked</span></td><td>—</td></tr>
+<tr><td>PrayerTimeRecord</td><td><span class="badge bg-green">Public</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td>—</td></tr>
+<tr><td>PrayerTime</td><td><span class="badge bg-green">Public</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td>—</td></tr>
+<tr><td>Signal</td><td><span class="badge bg-green">Public</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td>—</td></tr>
+<tr><td>VerifiedBadge</td><td><span class="badge bg-green">Public</span></td><td><span class="badge bg-red">Admin</span></td><td><span class="badge bg-red">Admin</span></td><td><span class="badge bg-red">Admin</span></td><td><span class="badge bg-red">Admin</span> (revoke)</td></tr>
+<tr><td>verify_badge</td><td><span class="badge bg-green">Public</span></td><td colspan="4">—</td></tr>
+<tr><td>MasjidAdmin</td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td>—</td></tr>
+<tr><td>FavouriteMasjid</td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td>—</td></tr>
+<tr><td>AdminUser</td><td><span class="badge bg-red">Admin</span></td><td><span class="badge bg-red">Admin</span></td><td><span class="badge bg-red">Admin</span></td><td><span class="badge bg-red">Admin</span></td><td>—</td></tr>
+<tr><td>RegularUser</td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td><span class="badge bg-blue">Auth</span></td><td>—</td></tr>
+</tbody>
+</table>
+<p class="desc" style="margin-top:.5rem"><span class="badge bg-green">Public</span> = AllowAny &nbsp; <span class="badge bg-blue">Auth</span> = IsAuthenticated &nbsp; <span class="badge bg-red">Admin</span> = IsAdminUser (Django superuser)</p>
+</div>
+</div>
+
+
+<!-- ================================================================ 13 -->
+<div class="section" id="s13">
+<h2>13 · Business Rules Summary</h2>
+<div class="section-body">
+
+<h3>13.1 · Confidence System</h3>
+<table>
+<thead><tr><th>Rule</th><th>Trigger</th><th>Effect</th><th>Implementation</th></tr></thead>
+<tbody>
+<tr><td>Community Upgrade</td><td>≥3 unique users send USER signals within 30 days</td><td>C0 → C1</td><td><code>process_signal()</code>: counts distinct users via <code>_count_unique_signal_users()</code></td></tr>
+<tr><td>Admin Upgrade (low)</td><td>ADMIN signal on masjid at C0 or C1</td><td>→ C2</td><td><code>process_signal()</code>: <code>if level &lt; 2: level = 2</code></td></tr>
+<tr><td>Admin Upgrade (high)</td><td>ADMIN signal on masjid at C2</td><td>→ C3</td><td><code>process_signal()</code>: <code>else: level = 3</code></td></tr>
+<tr><td>Admin at Max</td><td>ADMIN signal on masjid at C3</td><td>Stays C3</td><td><code>process_signal()</code>: <code>else: level = 3</code> (idempotent)</td></tr>
+<tr><td>System Signal</td><td>SYSTEM signal</td><td>No confidence change</td><td><code>process_signal()</code>: no-op branch</td></tr>
+<tr><td>Decay C3→C2</td><td>90 days since last upgrade</td><td>C3 → C2</td><td><code>decay_confidence()</code>: <code>level -= 1</code></td></tr>
+<tr><td>Decay C2→C1</td><td>180 days since last upgrade</td><td>C2 → C1</td><td><code>decay_confidence()</code>: <code>level -= 1</code></td></tr>
+<tr><td>Decay C1→C0</td><td>365 days since last upgrade</td><td>C1 → C0</td><td><code>decay_confidence()</code>: <code>level -= 1</code>, decayDate = None</td></tr>
+<tr><td>Floor</td><td>C0 with any decayDate</td><td>No further decay</td><td><code>decay_confidence()</code>: guard <code>if level ≤ 0: return False</code></td></tr>
+<tr><td>Auto-create</td><td>Signal for masjid with no ConfidenceRecord</td><td>Creates record at C0</td><td><code>process_signal()</code>: <code>get_or_create(defaults={"confidenceLevel": 0})</code></td></tr>
+</tbody>
+</table>
+
+<h3>13.2 · Badge System</h3>
+<table>
+<thead><tr><th>Rule</th><th>Condition</th><th>Effect</th><th>Implementation</th></tr></thead>
+<tbody>
+<tr><td>Valid Badge</td><td>isActive=True, isRevoked=False, confidence ≥ C2, masjid active, not expired</td><td>Returns <code>valid: true</code></td><td><code>check_badge_validity()</code>: all guards pass → True</td></tr>
+<tr><td>Auto-Deactivate (confidence)</td><td>Masjid confidence drops below C2</td><td>isActive set to False</td><td><code>check_badge_validity()</code>: <code>save(update_fields=["isActive"])</code></td></tr>
+<tr><td>Auto-Deactivate (expiry)</td><td>expiryDate in the past</td><td>isActive set to False</td><td><code>check_badge_validity()</code>: checks <code>expiryDate &lt; now()</code></td></tr>
+<tr><td>Auto-Deactivate (masjid)</td><td>Masjid isActive=False</td><td>isActive set to False</td><td><code>check_badge_validity()</code>: checks <code>badge.masjid.isActive</code></td></tr>
+<tr><td>Manual Revoke</td><td>Admin hits <code>/revoke/</code></td><td>isActive=False, isRevoked=True</td><td><code>VerifiedBadgeViewSet.revoke()</code>: sets both flags, saves</td></tr>
+<tr><td>Verification Tracking</td><td>Any <code>/verify/{token}/</code> call</td><td>lastCheckedAt updated</td><td><code>verify_badge()</code>: <code>save(update_fields=["lastCheckedAt"])</code></td></tr>
+</tbody>
+</table>
+
+<h3>13.3 · Prayer Time Schemas</h3>
+<table>
+<thead><tr><th>Schema (modelType)</th><th>adhan_time</th><th>iqama_time</th><th>Use Case</th></tr></thead>
+<tbody>
+<tr><td><code>FULL_TIMETABLE</code></td><td>✅ Provided</td><td>✅ Provided</td><td>Masjid publishes both call to prayer and congregation times</td></tr>
+<tr><td><code>IQAMA_ONLY</code></td><td>—</td><td>✅ Provided</td><td>Masjid only shares when congregation starts</td></tr>
+<tr><td><code>ADHAN_ONLY</code></td><td>✅ Provided</td><td>—</td><td>Masjid only shares call to prayer times</td></tr>
+<tr><td><code>UNKNOWN</code></td><td>Either</td><td>Either</td><td>Default — data quality unclear. At least one required per PrayerTime.</td></tr>
+</tbody>
+</table>
+
+<h3>13.4 · Favourites</h3>
+<table>
+<thead><tr><th>Rule</th><th>Enforcement</th></tr></thead>
+<tbody>
+<tr><td>One favourite per user per masjid</td><td><code>unique_together = ("user", "masjid")</code> on model → DB constraint → DRF returns 400</td></tr>
+<tr><td>Multiple masjids per user</td><td>No limit — user can favourite as many different masjids as they want</td></tr>
+<tr><td>Multiple users per masjid</td><td>No limit — different users can favourite the same masjid</td></tr>
+<tr><td>Unfavourite</td><td>DELETE <code>/api/favourites/{id}/</code> → removes the row</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- ================================================================ 14 -->
+<div class="section" id="s14">
+<h2>14 · Django &amp; DRF Constructs Glossary</h2>
+<div class="section-body">
+<p class="desc">Every Django and DRF construct used in the project, what it does, and where it appears.</p>
+
+<h3>14.1 · Django ORM &amp; Models</h3>
+<table>
+<thead><tr><th>Construct</th><th>What It Is</th><th>Where Used</th></tr></thead>
+<tbody>
+<tr><td><code>models.Model</code></td><td>Base class — maps a Python class to a database table</td><td>All models inherit (via AbstractModel)</td></tr>
+<tr><td><code>class Meta: abstract = True</code></td><td>Tells Django not to create a table — fields are inherited by subclasses</td><td>AbstractModel, AbstractUserModel</td></tr>
+<tr><td><code>class Meta: unique_together</code></td><td>Database-level composite unique constraint on multiple columns</td><td>PrayerTimeRecord, PrayerTime, MasjidAdmin, FavouriteMasjid</td></tr>
+<tr><td><code>class Meta: ordering</code></td><td>Default ORDER BY for all querysets of this model</td><td>PrayerTimeRecord (<code>["-date"]</code>)</td></tr>
+<tr><td><code>models.ForeignKey(on_delete=CASCADE)</code></td><td>Many-to-one relationship — deleting parent deletes children</td><td>All FK relationships (14 total)</td></tr>
+<tr><td><code>related_name="..."</code></td><td>Name for the reverse FK accessor on the parent model</td><td>Masjid FKs, PrayerTimeRecord, MasjidAdmin</td></tr>
+<tr><td><code>default=uuid.uuid4</code></td><td>Callable default — generates a new UUID for each new instance</td><td>All UUID PKs + VerifiedBadge.token</td></tr>
+<tr><td><code>editable=False</code></td><td>Field cannot be edited in admin forms or serializers</td><td>All UUID PKs + VerifiedBadge.token</td></tr>
+<tr><td><code>choices=[...]</code></td><td>Restricts field values to a predefined list (enforced at form/serializer level)</td><td>CONFIDENCE_LEVELS, MODEL_TYPE_CHOICES, PRAYER_CHOICES, SIGNAL_TYPES, SOURCE_TYPES, countries</td></tr>
+<tr><td><code>clean()</code></td><td>Model-level validation method — called before save in forms/admin</td><td>PrayerTime: validates at least one time provided</td></tr>
+<tr><td><code>__str__()</code></td><td>Human-readable string representation — shown in admin, shell, logs</td><td>ConfidenceRecord, PrayerTimeRecord, Prayer, PrayerTime, Signal, VerifiedBadge, MasjidAdmin</td></tr>
+<tr><td><code>get_name_display()</code></td><td>Returns the human label for a choices field (auto-generated by Django)</td><td>Prayer.__str__(), Signal.__str__()</td></tr>
+<tr><td><code>objects.get_or_create()</code></td><td>Atomic lookup-or-insert — returns (instance, created_bool)</td><td>services.py: process_signal() for ConfidenceRecord</td></tr>
+<tr><td><code>objects.filter().values().distinct().count()</code></td><td>Chained queryset: filter → project columns → deduplicate → count</td><td>services.py: _count_unique_signal_users()</td></tr>
+<tr><td><code>select_related()</code></td><td>SQL JOIN — fetches FK objects in one query</td><td>views.py: MasjidViewSet, ConfidenceRecordViewSet, etc.</td></tr>
+<tr><td><code>prefetch_related()</code></td><td>Separate query + Python-side join — for reverse FKs / M2M</td><td>views.py: PrayerTimeRecordViewSet, MasjidViewSet actions</td></tr>
+<tr><td><code>save(update_fields=[...])</code></td><td>Only updates specified columns — efficient, avoids overwriting concurrent changes</td><td>services.py: check_badge_validity, views.py: verify_badge</td></tr>
+<tr><td><code>refresh_from_db()</code></td><td>Reloads instance from database — used in tests to verify changes</td><td>tests.py: after process_signal, decay, etc.</td></tr>
+</tbody>
+</table>
+
+<h3>14.2 · Django REST Framework</h3>
+<table>
+<thead><tr><th>Construct</th><th>What It Is</th><th>Where Used</th></tr></thead>
+<tbody>
+<tr><td><code>serializers.ModelSerializer</code></td><td>Auto-generates serializer fields from a Django model — handles validation, create, update</td><td>All 12 serializers</td></tr>
+<tr><td><code>fields = [...]</code></td><td>Explicit whitelist of fields to include in API input/output</td><td>All serializer Meta classes</td></tr>
+<tr><td><code>read_only_fields = [...]</code></td><td>Fields that appear in output but are ignored in input</td><td>All serializers — UUIDs, timestamps</td></tr>
+<tr><td><code>PrimaryKeyRelatedField</code></td><td>Accepts a PK value for a FK relationship in write operations</td><td>PrayerTimeSerializer: <code>prayer_id</code></td></tr>
+<tr><td><code>validate()</code></td><td>Object-level validation — cross-field checks after individual field validation</td><td>PrayerTimeSerializer: checks ≥1 time</td></tr>
+<tr><td><code>viewsets.ModelViewSet</code></td><td>Provides all 6 CRUD actions: list, create, retrieve, update, partial_update, destroy</td><td>10 ViewSets</td></tr>
+<tr><td><code>viewsets.ReadOnlyModelViewSet</code></td><td>Only list + retrieve — no create/update/delete</td><td>PrayerViewSet</td></tr>
+<tr><td><code>get_permissions()</code></td><td>Override to return different permission classes per action</td><td>MasjidViewSet, ConfidenceRecordViewSet, etc.</td></tr>
+<tr><td><code>perform_create()</code></td><td>Hook called after validation, during save — add side effects</td><td>SignalViewSet: calls process_signal()</td></tr>
+<tr><td><code>get_queryset()</code></td><td>Override to customize the base queryset</td><td>FavouriteMasjidViewSet</td></tr>
+<tr><td><code>@action(detail=True)</code></td><td>Creates a custom endpoint on a single object: <code>/resource/{pk}/action/</code></td><td>MasjidViewSet (3 actions), VerifiedBadgeViewSet (revoke)</td></tr>
+<tr><td><code>@api_view(["GET"])</code></td><td>Decorator that turns a function into a DRF view</td><td>verify_badge()</td></tr>
+<tr><td><code>@permission_classes([...])</code></td><td>Sets permissions on a function-based view</td><td>verify_badge(): AllowAny</td></tr>
+<tr><td><code>Response(data, status=...)</code></td><td>DRF response — auto content-negotiation (JSON, browsable HTML)</td><td>All custom actions and verify_badge</td></tr>
+<tr><td><code>status.HTTP_xxx</code></td><td>Named HTTP status codes for readability</td><td>views.py, tests.py</td></tr>
+<tr><td><code>DefaultRouter</code></td><td>Auto-generates URL patterns for ViewSets (list, detail, actions)</td><td>centralAPI/urls.py</td></tr>
+<tr><td><code>DjangoFilterBackend</code></td><td>Enables <code>?field=value</code> exact-match filtering</td><td>All ViewSets with filterset_fields</td></tr>
+<tr><td><code>SearchFilter</code></td><td>Enables <code>?search=text</code> partial text search</td><td>MasjidViewSet, LocationRecordViewSet</td></tr>
+<tr><td><code>OrderingFilter</code></td><td>Enables <code>?ordering=field</code> (or <code>-field</code> for descending)</td><td>MasjidViewSet, PrayerTimeRecordViewSet, SignalViewSet</td></tr>
+<tr><td><code>PageNumberPagination</code></td><td>Wraps results in <code>{count, next, previous, results}</code></td><td>Global default: PAGE_SIZE = 25</td></tr>
+<tr><td><code>IsAuthenticated</code></td><td>Request must have a valid JWT or session</td><td>Multiple ViewSets</td></tr>
+<tr><td><code>IsAdminUser</code></td><td>Request user must be a Django superuser (<code>is_staff=True</code>)</td><td>AdminUserViewSet, ConfidenceRecordViewSet writes, BadgeViewSet writes</td></tr>
+<tr><td><code>AllowAny</code></td><td>No authentication required</td><td>Public reads, MasjidViewSet actions, verify_badge</td></tr>
+</tbody>
+</table>
+
+<h3>14.3 · Django Admin</h3>
+<table>
+<thead><tr><th>Construct</th><th>What It Is</th><th>Where Used</th></tr></thead>
+<tbody>
+<tr><td><code>@admin.register(Model)</code></td><td>Registers the model with the admin site using the decorated class</td><td>All 12 models</td></tr>
+<tr><td><code>admin.ModelAdmin</code></td><td>Customizes how a model appears in the admin dashboard</td><td>All admin classes</td></tr>
+<tr><td><code>list_display</code></td><td>Columns shown in the model's list view</td><td>All admin classes</td></tr>
+<tr><td><code>list_filter</code></td><td>Sidebar filters in the list view</td><td>Masjid (isActive), ConfidenceRecord (level), etc.</td></tr>
+<tr><td><code>search_fields</code></td><td>Fields searchable via the admin search bar</td><td>Most admin classes — names, emails, usernames</td></tr>
+<tr><td><code>readonly_fields</code></td><td>Fields shown but not editable in the detail form</td><td>UUID PKs, tokens, auto-timestamps</td></tr>
+<tr><td><code>inlines</code></td><td>Related models displayed inside the parent's edit page</td><td>MasjidModelAdmin (5), PrayerTimeRecordAdmin (1)</td></tr>
+<tr><td><code>admin.StackedInline</code></td><td>Full-width form layout for inline related objects</td><td>ConfidenceRecord, LocationRecord — complex forms</td></tr>
+<tr><td><code>admin.TabularInline</code></td><td>Compact table-row layout for inline related objects</td><td>PrayerTime, Signal, Badge, MasjidAdmin — simple/many rows</td></tr>
+<tr><td><code>extra = 0</code></td><td>Don't show empty extra forms for adding new inline objects</td><td>All inlines</td></tr>
+</tbody>
+</table>
+
+<h3>14.4 · Testing Constructs</h3>
+<table>
+<thead><tr><th>Construct</th><th>What It Is</th><th>Where Used</th></tr></thead>
+<tbody>
+<tr><td><code>TestCase</code></td><td>Django test class — wraps each test in a transaction for isolation</td><td>All 23 test classes</td></tr>
+<tr><td><code>APIClient</code></td><td>DRF test client — simulates HTTP requests with auth support</td><td>TestDataMixin.setUp()</td></tr>
+<tr><td><code>force_authenticate(user=...)</code></td><td>Bypasses JWT/session — directly authenticates as a user for testing</td><td>auth_as_admin(), auth_as_user(), auth_none()</td></tr>
+<tr><td><code>setUp()</code></td><td>Runs before each test method — creates fresh test data</td><td>TestDataMixin, PrayerTimeSchemaTest, UserFavouritesLogicTest</td></tr>
+<tr><td><code>Mixin pattern</code></td><td>TestDataMixin creates shared objects; test classes inherit it + TestCase</td><td><code>class MyTest(TestDataMixin, TestCase)</code></td></tr>
+<tr><td><code>assertEqual / assertTrue / assertFalse</code></td><td>Standard assertions — value equality, boolean checks</td><td>All tests</td></tr>
+<tr><td><code>assertRaises(Exception)</code></td><td>Context manager — asserts that the block raises the specified exception</td><td>unique_together violation tests</td></tr>
+<tr><td><code>assertAlmostEqual(delta=...)</code></td><td>Float comparison with tolerance</td><td>decay_date_values: day counts</td></tr>
+<tr><td><code>refresh_from_db()</code></td><td>Reloads model from database to see changes made by other code</td><td>After process_signal(), decay_confidence(), API calls</td></tr>
+<tr><td><code>Signal.objects.filter(pk=sig.pk).update(created_at=...)</code></td><td>Backdates a record's timestamp — bypasses auto_now_add for time-travel testing</td><td>test_old_signals_outside_window_ignored</td></tr>
+<tr><td><code>call_command("name", stdout=out)</code></td><td>Programmatically runs a management command and captures output</td><td>DecayConfidenceCommandTest</td></tr>
+<tr><td><code>StringIO</code></td><td>In-memory text stream — captures command stdout for assertions</td><td>DecayConfidenceCommandTest</td></tr>
+</tbody>
+</table>
+
+<h3>14.5 · Third-Party Integrations</h3>
+<table>
+<thead><tr><th>Package</th><th>Constructs Used</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>djangorestframework-simplejwt</code></td><td><code>JWTAuthentication</code>, <code>TokenObtainPairView</code>, <code>TokenRefreshView</code></td><td>Stateless auth: client sends JWT in <code>Authorization: Bearer &lt;token&gt;</code> header</td></tr>
+<tr><td><code>django-filter</code></td><td><code>DjangoFilterBackend</code>, <code>filterset_fields</code></td><td>Auto URL param filtering: <code>?confidenceLevel=2&amp;masjid=uuid</code></td></tr>
+<tr><td><code>django-cors-headers</code></td><td><code>CorsMiddleware</code>, <code>CORS_ALLOW_ALL_ORIGINS</code>, <code>CORS_ALLOWED_ORIGINS</code></td><td>Adds <code>Access-Control-Allow-Origin</code> headers for cross-origin API access</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+</div><!-- .container -->
+</body>
+</html>
