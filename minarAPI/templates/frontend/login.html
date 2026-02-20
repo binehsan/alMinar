@@ -1,0 +1,58 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<section class="auth-hero">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7">
+        <div class="auth-card fade-up">
+          <div class="auth-logo text-center mb-4">
+            <img src="{% static 'img/2.png' %}" alt="Al-Minar" style="height:48px">
+            <h3 class="mt-3 fw-bold" style="color:var(--primary-dark)">Welcome Back</h3>
+            <p class="text-muted mb-0">Sign in to your Al-Minar account</p>
+          </div>
+
+          <form method="post" action="{% url 'login' %}" autocomplete="on">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="login-username" class="form-label fw-semibold">Username</label>
+              <div class="input-icon-wrapper">
+                <i class="fas fa-user"></i>
+                <input type="text" class="form-control auth-input" id="login-username"
+                       name="username" placeholder="Enter your username" required autocomplete="username">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="login-password" class="form-label fw-semibold">Password</label>
+              <div class="input-icon-wrapper">
+                <i class="fas fa-lock"></i>
+                <input type="password" class="form-control auth-input" id="login-password"
+                       name="password" placeholder="Enter your password" required autocomplete="current-password">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-al-primary w-100">
+              <i class="fas fa-sign-in-alt me-2"></i>Sign In
+            </button>
+          </form>
+
+          <div class="auth-divider">
+            <span>New to Al-Minar?</span>
+          </div>
+
+          <a href="{% url 'register' %}" class="btn btn-al-outline-dark w-100">
+            <i class="fas fa-user-plus me-2"></i>Create an Account
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

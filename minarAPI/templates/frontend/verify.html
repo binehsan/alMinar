@@ -1,0 +1,30 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}Verify Badge{% endblock %}
+
+{% block content %}
+
+<section style="background:linear-gradient(135deg, var(--primary-dark), var(--primary));padding:7rem 0 5rem">
+  <div class="container">
+    <div class="text-center mb-4">
+      <img src="{% static 'img/2.png' %}" alt="Al-Minār" style="height:50px;margin-bottom:1rem">
+      <h2 class="text-white fw-bold">Badge Verification</h2>
+      <p class="text-white-50 mx-auto" style="max-width:440px">
+        Checking the authenticity of a verified masjid badge on the Al-Minār registry.
+      </p>
+    </div>
+
+    <div class="verify-card" id="verify-card" data-token="{{ token }}">
+      <div class="verify-icon loading">
+        <div class="al-spinner"></div>
+      </div>
+      <h3 class="verify-title text-muted fw-bold fs-5">Verifying Badge...</h3>
+      <div class="verify-body">
+        <p class="text-muted">Please wait while we check this badge.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

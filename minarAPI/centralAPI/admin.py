@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+
 from .models import (
-    AdminUser,
-    RegularUser,
+    UserProfile,
     Masjid,
     ConfidenceRecord,
     LocationRecord,
@@ -12,27 +14,43 @@ from .models import (
     VerifiedBadge,
     MasjidAdmin,
     FavouriteMasjid,
+    VerificationDocument,
 )
 
 
-# ---------------------------------------------------------------------------
-# Inlines
-# ---------------------------------------------------------------------------
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = "Profile"
+    fk_name = "user"
+
+
+class CustomUserAdmin(BaseUserAdmin):
+    inlines = [UserProfileInline]
+    list_display = (
+        "username", "email", "first_name", "last_name", "is_staff", "get_role",
+    )
+
+    @admin.display(description="Role")
+    def get_role(self, obj):
+        profile = getattr(obj, "profile", None)
+        return profile.get_role_display() if profile else "-"
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
+
 
 class ConfidenceRecordInline(admin.StackedInline):
     model = ConfidenceRecord
     extra = 0
+    readonly_fields = ("crID", "lastConfirmationDate")
 
 
 class LocationRecordInline(admin.StackedInline):
     model = LocationRecord
     extra = 0
-
-
-class PrayerTimeInline(admin.TabularInline):
-    model = PrayerTime
-    extra = 0
-    readonly_fields = ("prayerTimeID",)
+    readonly_fields = ("lrID",)
 
 
 class SignalInline(admin.TabularInline):
@@ -53,25 +71,28 @@ class MasjidAdminInline(admin.TabularInline):
     readonly_fields = ("masjidAdminID",)
 
 
-# ---------------------------------------------------------------------------
-# Model Admin Classes
-# ---------------------------------------------------------------------------
-
-@admin.register(AdminUser)
-class AdminUserAdmin(admin.ModelAdmin):
-    list_display = ("username", "email", "created_at")
-    search_fields = ("username", "email")
+class PrayerTimeInline(admin.TabularInline):
+    model = PrayerTime
+    extra = 0
+    readonly_fields = ("prayerTimeID",)
 
 
-@admin.register(RegularUser)
-class RegularUserAdmin(admin.ModelAdmin):
-    list_display = ("username", "email", "created_at")
-    search_fields = ("username", "email")
+class VerificationDocumentInline(admin.TabularInline):
+    model = VerificationDocument
+    extra = 0
+    readonly_fields = ("docID", "created_at")
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "role", "created_at")
+    list_filter = ("role",)
+    search_fields = ("user__username", "user__email")
 
 
 @admin.register(Masjid)
 class MasjidModelAdmin(admin.ModelAdmin):
-    list_display = ("name", "masjidID", "isActive", "confidenceRecord", "created_at")
+    list_display = ("name", "masjidID", "isActive", "get_confidence", "created_at")
     list_filter = ("isActive",)
     search_fields = ("name", "description")
     readonly_fields = ("masjidID",)
@@ -82,6 +103,11 @@ class MasjidModelAdmin(admin.ModelAdmin):
         VerifiedBadgeInline,
         MasjidAdminInline,
     ]
+
+    @admin.display(description="Confidence")
+    def get_confidence(self, obj):
+        cr = getattr(obj, "confidence_record", None)
+        return f"C{cr.confidenceLevel}" if cr else "-"
 
 
 @admin.register(ConfidenceRecord)
@@ -131,7 +157,9 @@ class SignalAdmin(admin.ModelAdmin):
 
 @admin.register(VerifiedBadge)
 class VerifiedBadgeAdmin(admin.ModelAdmin):
-    list_display = ("masjid", "token", "isActive", "isRevoked", "issueDate", "expiryDate")
+    list_display = (
+        "masjid", "token", "isActive", "isRevoked", "issueDate", "expiryDate",
+    )
     list_filter = ("isActive", "isRevoked")
     search_fields = ("masjid__name",)
     readonly_fields = ("badgeID", "token", "issueDate")
@@ -143,6 +171,7 @@ class MasjidAdminAdmin(admin.ModelAdmin):
     list_filter = ("verifiedIdentity",)
     search_fields = ("user__username", "masjid__name")
     readonly_fields = ("masjidAdminID",)
+    inlines = [VerificationDocumentInline]
 
 
 @admin.register(FavouriteMasjid)
@@ -150,3 +179,23 @@ class FavouriteMasjidAdmin(admin.ModelAdmin):
     list_display = ("user", "masjid", "created_at")
     search_fields = ("user__username", "masjid__name")
     readonly_fields = ("favID",)
+
+
+@admin.register(VerificationDocument)
+class VerificationDocumentAdmin(admin.ModelAdmin):
+    list_display = (
+        "masjid_admin_link", "description", "reviewed", "approved", "created_at",
+    )
+    list_filter = ("reviewed", "approved")
+    search_fields = (
+        "masjid_admin_link__masjid__name",
+        "masjid_admin_link__user__username",
+    )
+    readonly_fields = ("docID", "created_at")
+
+    def save_model(self, request, obj, form, change):
+        """When a doc is approved, auto-upgrade masjid to C3."""
+        super().save_model(request, obj, form, change)
+        if obj.approved and obj.reviewed:
+            from .services import approve_verification_document
+            approve_verification_document(obj)

@@ -1,0 +1,246 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}{{ masjid.name }}{% endblock %}
+
+{% block content %}
+
+<div id="detail-data" data-masjid-id="{{ masjid.masjidID }}">
+
+  <!-- Hidden fields for JS map -->
+  {% if masjid.location_record %}
+  <input type="hidden" id="detail-lat" value="{{ masjid.location_record.latitude }}">
+  <input type="hidden" id="detail-lng" value="{{ masjid.location_record.longitude }}">
+  {% endif %}
+
+  <!-- ===== Hero ===== -->
+  <section class="detail-hero">
+    <div class="container">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <a href="{% url 'explore' %}" class="text-white-50 small"><i class="fas fa-arrow-left me-1"></i> Back to Explore</a>
+      </div>
+      <div class="row align-items-end">
+        <div class="col-lg-8">
+          <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
+            {% if masjid.confidence_record %}
+              {% with level=masjid.confidence_record.confidenceLevel %}
+              <span class="confidence-badge c{{ level }}">
+                {% if level == 0 %}<i class="fas fa-circle"></i> Community Reported
+                {% elif level == 1 %}<i class="fas fa-users"></i> Community Confirmed
+                {% elif level == 2 %}<i class="fas fa-check-circle"></i> Verified
+                {% elif level == 3 %}<i class="fas fa-shield-alt"></i> Actively Maintained
+                {% endif %}
+              </span>
+              {% endwith %}
+            {% else %}
+              <span class="confidence-badge c0"><i class="fas fa-circle"></i> Community Reported</span>
+            {% endif %}
+            {% if masjid.isActive %}
+              <span class="confidence-badge" style="background:#D1FAE5;color:#065F46"><i class="fas fa-circle" style="font-size:.5rem"></i> Active</span>
+            {% else %}
+              <span class="confidence-badge" style="background:#FEE2E2;color:#991B1B"><i class="fas fa-circle" style="font-size:.5rem"></i> Inactive</span>
+            {% endif %}
+          </div>
+          <h1>{{ masjid.name }}</h1>
+          {% if masjid.location_record %}
+          <p class="text-white-50 mb-0">
+            <i class="fas fa-map-marker-alt me-1"></i>
+            {{ masjid.location_record.city }}{% if masjid.location_record.city and masjid.location_record.country %}, {% endif %}{{ masjid.location_record.country }}
+            {% if masjid.location_record.region %} · {{ masjid.location_record.region }}{% endif %}
+          </p>
+          {% endif %}
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          {% if masjid.confidence_record and masjid.confidence_record.confidenceLevel >= 2 %}
+          <div class="verified-shield gold d-inline-flex">
+            <i class="fas fa-certificate"></i>
+            <span class="shield-label">Verified</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Body ===== -->
+  <section class="py-4" style="margin-top:-1.5rem;position:relative;z-index:5">
+    <div class="container">
+      <div class="row g-4">
+
+        <!-- Left Column -->
+        <div class="col-lg-8">
+
+          <!-- Description -->
+          <div class="detail-info-card mb-4 fade-up">
+            <h6><i class="fas fa-info-circle me-2 text-accent"></i>About This Masjid</h6>
+            <p class="mb-0" style="line-height:1.8">
+              {{ masjid.description|default:"No description has been provided for this masjid yet." }}
+            </p>
+          </div>
+
+          <!-- Prayer Times -->
+          <div class="detail-info-card mb-4 fade-up">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="mb-0"><i class="fas fa-clock me-2 text-accent"></i>Prayer Times</h6>
+              {% if prayer_record %}
+              <small class="text-muted"><i class="fas fa-calendar me-1"></i>{{ prayer_record.date|date:"M d, Y" }}</small>
+              {% endif %}
+            </div>
+            {% if prayer_times %}
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0" style="font-size:.88rem">
+                <thead>
+                  <tr class="text-muted" style="font-size:.78rem">
+                    <th>Prayer</th>
+                    <th class="text-center">Adhan</th>
+                    <th class="text-center">Iqama</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for pt in prayer_times %}
+                  <tr>
+                    <td class="fw-semibold">
+                      {% if pt.prayer.name == "fajr" %}<i class="fas fa-sun text-warning me-1" style="font-size:.7rem"></i> Fajr
+                      {% elif pt.prayer.name == "dhuhr" %}<i class="fas fa-sun text-accent me-1" style="font-size:.7rem"></i> Dhuhr
+                      {% elif pt.prayer.name == "asr" %}<i class="fas fa-cloud-sun text-info me-1" style="font-size:.7rem"></i> Asr
+                      {% elif pt.prayer.name == "maghrib" %}<i class="fas fa-moon text-danger me-1" style="font-size:.7rem"></i> Maghrib
+                      {% elif pt.prayer.name == "isha" %}<i class="fas fa-moon text-primary me-1" style="font-size:.7rem"></i> Isha
+                      {% endif %}
+                    </td>
+                    <td class="text-center">
+                      {% if pt.adhan_time %}{{ pt.adhan_time|time:"H:i" }}{% else %}<span class="text-muted">—</span>{% endif %}
+                    </td>
+                    <td class="text-center">
+                      {% if pt.iqama_time %}{{ pt.iqama_time|time:"H:i" }}{% else %}<span class="text-muted">—</span>{% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% if prayer_record.modelType != "UNKNOWN" %}
+            <div class="mt-2">
+              <span class="badge" style="background:rgba(184,134,11,.1);color:var(--primary-brand);font-size:.72rem">
+                {{ prayer_record.get_modelType_display }}
+              </span>
+              <small class="text-muted ms-2" style="font-size:.75rem">
+                Last updated {{ prayer_record.lastUpdated|date:"M d, Y" }}
+              </small>
+            </div>
+            {% endif %}
+            {% else %}
+            <p class="text-muted text-center py-3 mb-0" style="font-size:.88rem">
+              <i class="fas fa-clock" style="font-size:1.5rem;opacity:.3;display:block;margin-bottom:.5rem"></i>
+              No prayer times available yet.
+            </p>
+            {% endif %}
+          </div>
+
+          <!-- Signals -->
+          <div class="detail-info-card mb-4 fade-up">
+            <h6><i class="fas fa-broadcast-tower me-2 text-accent"></i>Recent Signals</h6>
+            {% if recent_signals %}
+            {% for s in recent_signals %}
+            <div class="d-flex align-items-center gap-3 py-2 {% if not forloop.last %}border-bottom{% endif %}">
+              <div style="width:32px;height:32px;border-radius:8px;background:rgba(184,134,11,.1);display:flex;align-items:center;justify-content:center">
+                <i class="fas fa-broadcast-tower text-primary-brand" style="font-size:.7rem"></i>
+              </div>
+              <div class="flex-fill">
+                <div class="fw-semibold" style="font-size:.82rem">{{ s.get_signalType_display }}</div>
+                <small class="text-muted">{{ s.get_sourceType_display }} · {{ s.created_at|date:"M d, Y H:i" }}</small>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-muted text-center py-3 mb-0" style="font-size:.88rem">No signals yet.</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-4">
+
+          <!-- Map -->
+          {% if masjid.location_record %}
+          <div class="detail-info-card mb-4 fade-up">
+            <h6><i class="fas fa-map me-2 text-accent"></i>Location</h6>
+            <div id="detail-map" style="height:220px;border-radius:12px;overflow:hidden"></div>
+            <div class="mt-3">
+              <div class="d-flex justify-content-between small text-muted mb-1">
+                <span>Latitude</span>
+                <span class="fw-semibold">{{ masjid.location_record.latitude }}</span>
+              </div>
+              <div class="d-flex justify-content-between small text-muted">
+                <span>Longitude</span>
+                <span class="fw-semibold">{{ masjid.location_record.longitude }}</span>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Confidence -->
+          <div class="detail-info-card mb-4 fade-up">
+            <h6><i class="fas fa-chart-line me-2 text-accent"></i>Confidence</h6>
+            {% if masjid.confidence_record %}
+              {% with cr=masjid.confidence_record %}
+              <div class="text-center py-3">
+                <div style="font-size:3rem;font-weight:900;color:var(--primary)">C{{ cr.confidenceLevel }}</div>
+                <p class="text-muted small mb-2">{{ cr.get_confidenceLevel_display }}</p>
+                {% if cr.decayDate %}
+                <small class="text-muted"><i class="fas fa-clock me-1"></i> Decay date: {{ cr.decayDate|date:"M d, Y" }}</small>
+                {% endif %}
+              </div>
+              {% endwith %}
+            {% else %}
+              <div class="text-center py-3">
+                <div style="font-size:3rem;font-weight:900;color:var(--text-muted)">C0</div>
+                <p class="text-muted small mb-0">Community Reported</p>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Badges -->
+          <div class="detail-info-card mb-4 fade-up">
+            <h6><i class="fas fa-certificate me-2 text-accent"></i>Verified Badges</h6>
+            {% if badges %}
+            {% for badge in badges %}
+            <div class="d-flex align-items-center gap-3 py-2 {% if not forloop.last %}border-bottom{% endif %}">
+              <div style="width:32px;height:32px;border-radius:8px;background:rgba(212,175,55,.15);display:flex;align-items:center;justify-content:center">
+                <i class="fas fa-certificate text-accent" style="font-size:.8rem"></i>
+              </div>
+              <div class="flex-fill">
+                <div class="fw-semibold" style="font-size:.82rem">Badge {{ badge.token|truncatechars:13 }}</div>
+                <small class="text-muted">Issued {{ badge.issueDate|date:"M d, Y" }}</small>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-muted text-center py-3 mb-0" style="font-size:.88rem">No badges yet.</p>
+            {% endif %}
+          </div>
+
+          <!-- Metadata -->
+          <div class="detail-info-card fade-up">
+            <h6><i class="fas fa-database me-2 text-accent"></i>Metadata</h6>
+            <div class="d-flex justify-content-between small text-muted mb-2">
+              <span>Masjid ID</span>
+              <span class="fw-semibold" style="font-family:monospace;font-size:.72rem">{{ masjid.masjidID|truncatechars:13 }}</span>
+            </div>
+            <div class="d-flex justify-content-between small text-muted mb-2">
+              <span>Created</span>
+              <span class="fw-semibold">{{ masjid.created_at|date:"M d, Y" }}</span>
+            </div>
+            <div class="d-flex justify-content-between small text-muted">
+              <span>Last Updated</span>
+              <span class="fw-semibold">{{ masjid.updated_at|date:"M d, Y" }}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+{% endblock %}

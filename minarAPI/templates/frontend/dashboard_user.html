@@ -1,0 +1,215 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Dashboard Hero -->
+<section style="background:linear-gradient(135deg, var(--primary-dark), var(--primary));padding:7rem 0 3rem">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3">
+      <div class="user-avatar" style="width:56px;height:56px;font-size:1.3rem">
+        <i class="fas fa-user"></i>
+      </div>
+      <div>
+        <h2 class="text-white fw-bold mb-0">Welcome, {{ user.username }}</h2>
+        <span class="badge" style="background:rgba(255,255,255,.15);color:var(--accent-light)">
+          <i class="fas fa-user me-1"></i>Regular User
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-4" style="margin-top:-1.5rem;position:relative;z-index:10">
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- Left Column -->
+      <div class="col-lg-8">
+
+        <!-- Send a Signal -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-broadcast-tower text-accent me-2"></i>SEND A SIGNAL</h6>
+          <p class="text-muted" style="font-size:.85rem">Verify a masjid by sending a signal — help improve its confidence level.</p>
+          <form method="post" action="{% url 'send-signal' %}">
+            {% csrf_token %}
+            <div class="row g-2 align-items-end">
+              <div class="col-md-5">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Select Masjid</label>
+                <select name="masjid_id" class="form-select auth-input masjid-search-select" required style="padding-left:1rem">
+                  <option value="">Search masjid...</option>
+                  {% for m in all_masjids %}
+                  <option value="{{ m.masjidID }}">{{ m.name }}{% if m.location_record %} — {{ m.location_record.city }}{% endif %}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Signal Type</label>
+                <select name="signal_type" class="form-select auth-input" style="padding-left:1rem">
+                  <option value="PRAYED">I prayed here</option>
+                  <option value="JUMMAH">Jummah observed</option>
+                  <option value="ACTIVE">Confirm active</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-al-primary btn-sm w-100">
+                  <i class="fas fa-paper-plane me-1"></i>Send
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Add to Favourites -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-heart text-accent me-2"></i>ADD TO FAVOURITES</h6>
+          <form method="post" action="{% url 'add-favourite' %}">
+            {% csrf_token %}
+            <div class="row g-2 align-items-end">
+              <div class="col-md-8">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Select Masjid</label>
+                <select name="masjid_id" class="form-select auth-input masjid-search-select" required style="padding-left:1rem">
+                  <option value="">Search masjid...</option>
+                  {% for m in all_masjids %}
+                  <option value="{{ m.masjidID }}">{{ m.name }}{% if m.location_record %} — {{ m.location_record.city }}{% endif %}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-4">
+                <button type="submit" class="btn btn-al-primary btn-sm w-100">
+                  <i class="fas fa-heart me-1"></i>Add Favourite
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Recent Signals -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-history text-accent me-2"></i>YOUR RECENT SIGNALS</h6>
+          {% if signals %}
+          {% for s in signals %}
+          <div class="d-flex align-items-center gap-3 py-2 {% if not forloop.last %}border-bottom{% endif %}">
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(184,134,11,.1);display:flex;align-items:center;justify-content:center">
+              <i class="fas fa-broadcast-tower text-primary-brand" style="font-size:.8rem"></i>
+            </div>
+            <div class="flex-fill">
+              <div class="fw-semibold" style="font-size:.85rem">
+                {{ s.get_signalType_display }} — <a href="{% url 'masjid-detail' s.masjid.masjidID %}">{{ s.masjid.name }}</a>
+              </div>
+              <small class="text-muted">{{ s.created_at|date:"M d, Y H:i" }}</small>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="text-muted text-center py-3 mb-0">No signals sent yet. Visit a masjid page to contribute!</p>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-lg-4">
+
+        <!-- Favourite Masjids -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-heart text-accent me-2"></i>FAVOURITE MASJIDS</h6>
+          {% if favourites %}
+          {% for fav in favourites %}
+          <div class="d-flex align-items-center gap-3 py-2 {% if not forloop.last %}border-bottom{% endif %}">
+            <div class="flex-fill">
+              <div class="fw-semibold" style="font-size:.88rem">
+                <a href="{% url 'masjid-detail' fav.masjid.masjidID %}">{{ fav.masjid.name }}</a>
+              </div>
+              {% if fav.masjid.location_record %}
+              <small class="text-muted">{{ fav.masjid.location_record.city }}, {{ fav.masjid.location_record.country }}</small>
+              {% endif %}
+            </div>
+            <form method="post" action="{% url 'remove-favourite' fav.favID %}" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger" title="Remove">
+                <i class="fas fa-times"></i>
+              </button>
+            </form>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="text-muted text-center py-3 mb-0">No favourites yet.</p>
+          {% endif %}
+        </div>
+
+        <!-- Quick Links -->
+        <div class="detail-info-card">
+          <h6><i class="fas fa-link text-accent me-2"></i>QUICK LINKS</h6>
+          <a href="{% url 'explore' %}" class="d-block py-2 border-bottom" style="font-size:.88rem">
+            <i class="fas fa-compass text-accent me-2"></i>Explore Masjids
+          </a>
+          <a href="{% url 'report' %}" class="d-block py-2 border-bottom" style="font-size:.88rem">
+            <i class="fas fa-plus-circle text-accent me-2"></i>Report a Masjid
+          </a>
+          <a href="{% url 'about' %}" class="d-block py-2" style="font-size:.88rem">
+            <i class="fas fa-info-circle text-accent me-2"></i>About Al-Minar
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Searchable select — wraps native <select> with a filterable text input
+document.querySelectorAll('.masjid-search-select').forEach(sel => {
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'relative';
+  sel.parentNode.insertBefore(wrapper, sel);
+  wrapper.appendChild(sel);
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'form-control auth-input';
+  input.placeholder = 'Type to search masjid...';
+  input.style.paddingLeft = '1rem';
+  input.autocomplete = 'off';
+
+  const dropdown = document.createElement('div');
+  dropdown.className = 'masjid-search-dropdown';
+  dropdown.style.cssText = 'position:absolute;top:100%;left:0;right:0;max-height:200px;overflow-y:auto;background:#fff;border:1px solid var(--border);border-radius:0 0 12px 12px;z-index:999;display:none;box-shadow:0 8px 24px rgba(0,0,0,.12)';
+
+  wrapper.appendChild(input);
+  wrapper.appendChild(dropdown);
+  sel.style.display = 'none';
+
+  const options = Array.from(sel.options).filter(o => o.value);
+
+  function renderOptions(filter) {
+    const q = filter.toLowerCase();
+    const matches = q ? options.filter(o => o.textContent.toLowerCase().includes(q)) : options;
+    dropdown.innerHTML = matches.slice(0, 50).map(o =>
+      `<div class="px-3 py-2" style="cursor:pointer;font-size:.85rem;border-bottom:1px solid rgba(0,0,0,.05)" data-val="${o.value}">${o.textContent}</div>`
+    ).join('') || '<div class="px-3 py-2 text-muted" style="font-size:.85rem">No results</div>';
+    dropdown.style.display = matches.length || q ? 'block' : 'none';
+  }
+
+  input.addEventListener('focus', () => renderOptions(input.value));
+  input.addEventListener('input', () => renderOptions(input.value));
+  dropdown.addEventListener('click', e => {
+    const item = e.target.closest('[data-val]');
+    if (item) {
+      sel.value = item.dataset.val;
+      input.value = item.textContent;
+      dropdown.style.display = 'none';
+    }
+  });
+  document.addEventListener('click', e => {
+    if (!wrapper.contains(e.target)) dropdown.style.display = 'none';
+  });
+});
+</script>
+{% endblock %}

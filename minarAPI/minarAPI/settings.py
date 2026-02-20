@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',                          # Must be before django.contrib.admin
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,7 +65,7 @@ ROOT_URLCONF = 'minarAPI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,6 +126,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -176,4 +185,116 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
+}
+
+
+# ---------------------------------------------------------------------------
+# Jazzmin — Admin Theme
+# ---------------------------------------------------------------------------
+
+JAZZMIN_SETTINGS = {
+    # Title on the login screen and browser tab
+    "site_title": "Al-Minār Admin",
+    "site_header": "Al-Minār",
+    "site_brand": "Al-Minār",
+
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to Al-Minār Administration",
+
+    # Copyright line in the footer
+    "copyright": "Al-Minār Project",
+
+    # Search bar in the top navigation
+    "search_model": ["centralAPI.Masjid", "centralAPI.Signal"],
+
+    ############
+    # Top Menu #
+    ############
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "API", "url": "/api/", "new_window": True},
+        {"model": "centralAPI.Masjid"},
+    ],
+
+    #############
+    # Side Menu #
+    #############
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    # Organise models under custom headings in the sidebar
+    "order_with_respect_to": [
+        "centralAPI.Masjid",
+        "centralAPI.ConfidenceRecord",
+        "centralAPI.LocationRecord",
+        "centralAPI.PrayerTimeRecord",
+        "centralAPI.Prayer",
+        "centralAPI.PrayerTime",
+        "centralAPI.Signal",
+        "centralAPI.VerifiedBadge",
+        "centralAPI.MasjidAdmin",
+        "centralAPI.FavouriteMasjid",
+        "centralAPI.UserProfile",
+        "centralAPI.VerificationDocument",
+        "auth",
+    ],
+
+    # Icons for sidebar items (FontAwesome 5 free)
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.User": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "centralAPI.UserProfile": "fas fa-id-card",
+        "centralAPI.Masjid": "fas fa-mosque",
+        "centralAPI.ConfidenceRecord": "fas fa-chart-line",
+        "centralAPI.LocationRecord": "fas fa-map-marker-alt",
+        "centralAPI.PrayerTimeRecord": "fas fa-clock",
+        "centralAPI.Prayer": "fas fa-pray",
+        "centralAPI.PrayerTime": "fas fa-hourglass-half",
+        "centralAPI.Signal": "fas fa-broadcast-tower",
+        "centralAPI.VerifiedBadge": "fas fa-certificate",
+        "centralAPI.MasjidAdmin": "fas fa-user-tie",
+        "centralAPI.FavouriteMasjid": "fas fa-heart",
+        "centralAPI.VerificationDocument": "fas fa-file-alt",
+    },
+    "default_icon_parents": "fas fa-folder",
+    "default_icon_children": "fas fa-circle",
+
+    #############
+    # UI Tweaks #
+    #############
+    "show_ui_builder": False,
+    "changeform_format": "horizontal_tabs",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-dark",
+    "accent": "accent-primary",
+    "navbar": "navbar-dark navbar-primary",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "default",
+    "dark_mode_theme": "darkly",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
 }

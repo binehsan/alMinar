@@ -6,8 +6,6 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import (
-    AdminUser,
-    RegularUser,
     Masjid,
     ConfidenceRecord,
     LocationRecord,
@@ -18,10 +16,11 @@ from .models import (
     VerifiedBadge,
     MasjidAdmin,
     FavouriteMasjid,
+    VerificationDocument,
 )
 from .serializers import (
-    AdminUserSerializer,
-    RegularUserSerializer,
+    UserSerializer,
+    RegisterSerializer,
     MasjidSerializer,
     ConfidenceRecordSerializer,
     LocationRecordSerializer,
@@ -32,24 +31,33 @@ from .serializers import (
     VerifiedBadgeSerializer,
     MasjidAdminSerializer,
     FavouriteMasjidSerializer,
+    VerificationDocumentSerializer,
 )
 from .services import process_signal, check_badge_validity
 
 
 # ---------------------------------------------------------------------------
-# User ViewSets
+# Auth endpoints
 # ---------------------------------------------------------------------------
 
-class AdminUserViewSet(viewsets.ModelViewSet):
-    queryset = AdminUser.objects.all()
-    serializer_class = AdminUserSerializer
-    permission_classes = [IsAdminUser]
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def register_user(request):
+    """POST /api/register/ - create a new user + profile."""
+    serializer = RegisterSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = serializer.save()
+    return Response(
+        UserSerializer(user).data,
+        status=status.HTTP_201_CREATED,
+    )
 
 
-class RegularUserViewSet(viewsets.ModelViewSet):
-    queryset = RegularUser.objects.all()
-    serializer_class = RegularUserSerializer
-    permission_classes = [IsAuthenticated]
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def current_user(request):
+    """GET /api/me/ - return the authenticated user."""
+    return Response(UserSerializer(request.user).data)
 
 
 # ---------------------------------------------------------------------------
@@ -58,7 +66,7 @@ class RegularUserViewSet(viewsets.ModelViewSet):
 
 class MasjidViewSet(viewsets.ModelViewSet):
     queryset = Masjid.objects.select_related(
-        "confidenceRecord", "locationRecord"
+        "confidence_record", "location_record"
     ).all()
     serializer_class = MasjidSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -74,7 +82,6 @@ class MasjidViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"])
     def prayer_times(self, request, pk=None):
-        """GET /api/masjids/{id}/prayer_times/ — latest prayer times for a masjid."""
         masjid = self.get_object()
         records = PrayerTimeRecord.objects.filter(masjid=masjid).prefetch_related("prayers__prayer")
         serializer = PrayerTimeRecordSerializer(records, many=True)
@@ -82,7 +89,6 @@ class MasjidViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"])
     def signals(self, request, pk=None):
-        """GET /api/masjids/{id}/signals/ — signals for a masjid."""
         masjid = self.get_object()
         sigs = Signal.objects.filter(masjid=masjid).order_by("-created_at")
         serializer = SignalSerializer(sigs, many=True)
@@ -90,7 +96,6 @@ class MasjidViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"])
     def badges(self, request, pk=None):
-        """GET /api/masjids/{id}/badges/ — badges for a masjid."""
         masjid = self.get_object()
         badges = VerifiedBadge.objects.filter(masjid=masjid)
         serializer = VerifiedBadgeSerializer(badges, many=True)
@@ -135,7 +140,6 @@ class LocationRecordViewSet(viewsets.ModelViewSet):
 # ---------------------------------------------------------------------------
 
 class PrayerViewSet(viewsets.ReadOnlyModelViewSet):
-    """Lookup table — read-only. Fajr, Dhuhr, Asr, Maghrib, Isha."""
     queryset = Prayer.objects.all()
     serializer_class = PrayerSerializer
     permission_classes = [AllowAny]
@@ -187,7 +191,6 @@ class SignalViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated()]
 
     def perform_create(self, serializer):
-        """Save the signal, then run confidence-upgrade logic."""
         signal = serializer.save()
         process_signal(signal)
 
@@ -209,7 +212,6 @@ class VerifiedBadgeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], permission_classes=[IsAdminUser])
     def revoke(self, request, pk=None):
-        """POST /api/badges/{id}/revoke/ — revoke a badge."""
         badge = self.get_object()
         badge.isActive = False
         badge.isRevoked = True
@@ -220,10 +222,6 @@ class VerifiedBadgeViewSet(viewsets.ModelViewSet):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def verify_badge(request, token):
-    """
-    Public endpoint: GET /api/verify/{token}/
-    Used by masjid websites to confirm badge validity.
-    """
     try:
         badge = VerifiedBadge.objects.select_related("masjid").get(token=token)
     except VerifiedBadge.DoesNotExist:
@@ -234,7 +232,6 @@ def verify_badge(request, token):
 
     badge.lastCheckedAt = timezone.now()
     badge.save(update_fields=["lastCheckedAt"])
-
     is_valid = check_badge_validity(badge)
 
     return Response({
@@ -270,3 +267,15 @@ class FavouriteMasjidViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return FavouriteMasjid.objects.select_related("user", "masjid").all()
+
+
+# ---------------------------------------------------------------------------
+# Verification Document ViewSet
+# ---------------------------------------------------------------------------
+
+class VerificationDocumentViewSet(viewsets.ModelViewSet):
+    queryset = VerificationDocument.objects.select_related("masjid_admin_link").all()
+    serializer_class = VerificationDocumentSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["masjid_admin_link", "reviewed", "approved"]
+    permission_classes = [IsAuthenticated]

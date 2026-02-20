@@ -1,0 +1,363 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+
+<!-- ===== Hero ===== -->
+<section style="background:linear-gradient(135deg, var(--primary-dark), var(--primary));padding:7rem 0 4rem">
+  <div class="container text-center">
+    <img src="{% static 'img/1.png' %}" alt="Al-Minār" style="height:100px;margin-bottom:1.5rem;filter:drop-shadow(0 10px 30px rgba(0,0,0,.3))">
+    <h1 class="text-white fw-bold mb-3">About Al-Minār</h1>
+    <p class="text-white-50 mx-auto" style="max-width:600px;font-size:1.1rem">
+      <em>Al-Minār</em> (المنار) means "The Lighthouse" — a beacon that guides.
+      Our mission is to create a transparent, trusted global registry for masjids everywhere.
+    </p>
+  </div>
+</section>
+
+<!-- ===== Backstory ===== -->
+<section class="py-5">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 fade-up">
+        <div class="section-tag" style="display:inline-block;margin-bottom:1rem">Our Story</div>
+        <h2 class="fw-bold mb-3" style="color:var(--primary-dark)">Why We Built Al-Minār</h2>
+        <p class="text-muted" style="line-height:1.8">
+          The idea for Al-Minār was born out of a common frustration: finding a trustworthy masjid in an unfamiliar city.
+          Whether traveling for work, visiting family, or simply relocating, Muslims around the world face the same
+          challenge — how do you know if a masjid you've found online is real, active, and reliable?
+        </p>
+        <p class="text-muted" style="line-height:1.8">
+          Existing directories were often outdated, unverified, or maintained by a single person.
+          We envisioned a system where the <strong>community itself</strong> could vouch for a masjid's existence,
+          while masjid administrators could officially verify their institutions. This dual-layer approach —
+          community signals paired with admin verification — became the foundation of our <strong>Confidence System</strong>.
+        </p>
+        <p class="text-muted" style="line-height:1.8">
+          Al-Minār isn't just a directory. It's a <em>living registry</em> — one that grows, validates, and even
+          self-corrects over time through trust decay. If a masjid is no longer active, its confidence naturally
+          decreases, keeping the data honest and fresh.
+        </p>
+      </div>
+      <div class="col-lg-6 fade-up">
+        <img src="{% static 'img/4.png' %}" alt="Al-Minār Brand"
+             style="width:100%;max-width:400px;display:block;margin:0 auto;border-radius:20px;box-shadow:var(--shadow-lg)">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Founder's Message ===== -->
+<section class="py-5 bg-surface">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 fade-up">
+        <div class="detail-info-card">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="user-avatar" style="width:56px;height:56px;font-size:1.3rem;background:rgba(184,134,11,.15)">
+              <i class="fas fa-quote-left"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold mb-0" style="color:var(--primary-dark)">Founder's Message</h5>
+              <small class="text-muted">From the team behind Al-Minār</small>
+            </div>
+          </div>
+          <blockquote style="border-left:3px solid var(--accent);padding-left:1.5rem;margin:0;line-height:1.9;color:var(--text-secondary)">
+            <p>
+              <em>"Assalamu Alaikum. Al-Minār started as a simple question: 'Why is there no reliable way to find a
+              masjid I can trust?' We've all been there — opening a maps app and hoping the pin is accurate, the
+              masjid is still there, and it's actually serving the community.</em>
+            </p>
+            <p>
+              <em>We built Al-Minār to solve this. Not just as a database, but as a trust infrastructure — one
+              where the community validates from the ground up and administrators verify from the top down.
+              Our confidence system is designed to be honest: trust is earned over time, maintained through activity,
+              and decays when left unattended.</em>
+            </p>
+            <p>
+              <em>This is an open-source project, built for the Ummah, by the Ummah. We hope it becomes a
+              lasting resource that serves Muslims around the world, wherever they may be."</em>
+            </p>
+          </blockquote>
+          <div class="mt-3 d-flex align-items-center gap-2">
+            <div class="user-avatar" style="width:36px;height:36px;font-size:.8rem">
+              <i class="fas fa-user"></i>
+            </div>
+            <div>
+              <div class="fw-bold" style="font-size:.88rem">The Al-Minār Team</div>
+              <small class="text-muted">Est. 2026</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Meet the Team ===== -->
+<section class="py-5">
+  <div class="container">
+    <div class="section-heading fade-up">
+      <div class="section-tag">Our People</div>
+      <h2>Meet the Team</h2>
+      <p>The people behind the lighthouse.</p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="detail-info-card text-center h-100">
+          <div class="user-avatar mx-auto mb-3" style="width:72px;height:72px;font-size:1.6rem;background:rgba(184,134,11,.15)">
+            <i class="fas fa-laptop-code"></i>
+          </div>
+          <h6 class="fw-bold">Lead Developer</h6>
+          <p class="text-muted small mb-2">Full-stack architect. Designed the confidence system, API layer, and frontend.</p>
+          <span class="badge" style="background:rgba(184,134,11,.1);color:var(--primary-brand);font-size:.72rem">
+            <i class="fas fa-code me-1"></i>Engineering
+          </span>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="detail-info-card text-center h-100">
+          <div class="user-avatar mx-auto mb-3" style="width:72px;height:72px;font-size:1.6rem;background:rgba(184,134,11,.15)">
+            <i class="fas fa-paint-brush"></i>
+          </div>
+          <h6 class="fw-bold">UI/UX Design</h6>
+          <p class="text-muted small mb-2">Brand identity, visual design, and user experience across web and mobile.</p>
+          <span class="badge" style="background:rgba(184,134,11,.1);color:var(--primary-brand);font-size:.72rem">
+            <i class="fas fa-palette me-1"></i>Design
+          </span>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="detail-info-card text-center h-100">
+          <div class="user-avatar mx-auto mb-3" style="width:72px;height:72px;font-size:1.6rem;background:rgba(184,134,11,.15)">
+            <i class="fas fa-globe"></i>
+          </div>
+          <h6 class="fw-bold">Community & Outreach</h6>
+          <p class="text-muted small mb-2">Masjid partnerships, community engagement, and verification processes.</p>
+          <span class="badge" style="background:rgba(184,134,11,.1);color:var(--primary-brand);font-size:.72rem">
+            <i class="fas fa-handshake me-1"></i>Operations
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Verification Flowchart ===== -->
+<section class="py-5 bg-surface">
+  <div class="container">
+    <div class="section-heading fade-up">
+      <div class="section-tag">How It Works</div>
+      <h2>The Verification Process</h2>
+      <p>How masjids earn and maintain trust, step by step.</p>
+    </div>
+
+    <!-- User / Community Path -->
+    <div class="fade-up mb-5">
+      <h5 class="fw-bold mb-3" style="color:var(--primary-dark)">
+        <i class="fas fa-users text-accent me-2"></i>Community Verification Path
+      </h5>
+      <div class="row g-0 justify-content-center">
+        <div class="col-auto">
+          <div class="detail-info-card text-center" style="min-width:150px">
+            <div class="confidence-badge c0 mx-auto mb-2" style="font-size:.8rem;padding:.4rem 1rem"><i class="fas fa-circle"></i> C0</div>
+            <div class="fw-bold small">Reported</div>
+            <div class="text-muted" style="font-size:.72rem">Any user adds a masjid</div>
+          </div>
+        </div>
+        <div class="col-auto d-flex align-items-center px-2">
+          <div class="text-center">
+            <i class="fas fa-arrow-right text-accent" style="font-size:1.2rem"></i>
+            <div class="text-muted" style="font-size:.68rem;max-width:80px">3+ users<br>signal in 30 days</div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="detail-info-card text-center" style="min-width:150px">
+            <div class="confidence-badge c1 mx-auto mb-2" style="font-size:.8rem;padding:.4rem 1rem"><i class="fas fa-users"></i> C1</div>
+            <div class="fw-bold small">Confirmed</div>
+            <div class="text-muted" style="font-size:.72rem">Community validated</div>
+          </div>
+        </div>
+        <div class="col-auto d-flex align-items-center px-2">
+          <div class="text-center">
+            <i class="fas fa-arrow-right text-muted" style="font-size:1.2rem;opacity:.4"></i>
+            <div class="text-muted" style="font-size:.68rem;max-width:80px">Admin<br>verification<br>required</div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="detail-info-card text-center" style="min-width:150px;opacity:.5">
+            <div class="confidence-badge c2 mx-auto mb-2" style="font-size:.8rem;padding:.4rem 1rem"><i class="fas fa-check-circle"></i> C2</div>
+            <div class="fw-bold small">Verified</div>
+            <div class="text-muted" style="font-size:.72rem">Only via admin path</div>
+          </div>
+        </div>
+      </div>
+      <p class="text-muted small mt-3 text-center" style="max-width:600px;margin:0 auto">
+        <i class="fas fa-info-circle me-1"></i>
+        Community members can elevate a masjid from C0 to C1 by sending signals.
+        Getting from C1 to C2+ requires a Masjid Admin to register and verify.
+      </p>
+    </div>
+
+    <!-- Admin / Fast-Track Path -->
+    <div class="fade-up mb-5">
+      <h5 class="fw-bold mb-3" style="color:var(--primary-dark)">
+        <i class="fas fa-mosque text-accent me-2"></i>Masjid Admin Fast-Track Path
+        <span class="badge bg-success ms-2" style="font-size:.68rem">Bypass C2</span>
+      </h5>
+      <div class="row g-0 justify-content-center">
+        <div class="col-auto">
+          <div class="detail-info-card text-center" style="min-width:150px">
+            <div class="confidence-badge c0 mx-auto mb-2" style="font-size:.8rem;padding:.4rem 1rem"><i class="fas fa-circle"></i> C0</div>
+            <div class="fw-bold small">Registered</div>
+            <div class="text-muted" style="font-size:.72rem">Admin adds masjid</div>
+          </div>
+        </div>
+        <div class="col-auto d-flex align-items-center px-2">
+          <div class="text-center">
+            <i class="fas fa-arrow-right text-accent" style="font-size:1.2rem"></i>
+            <div class="text-muted" style="font-size:.68rem;max-width:100px">Upload official<br>document (PDF)</div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="detail-info-card text-center" style="min-width:150px;border:2px solid var(--accent)">
+            <div><i class="fas fa-file-alt text-accent mb-1" style="font-size:1.2rem"></i></div>
+            <div class="fw-bold small">Doc Review</div>
+            <div class="text-muted" style="font-size:.72rem">Team reviews proof</div>
+          </div>
+        </div>
+        <div class="col-auto d-flex align-items-center px-2">
+          <div class="text-center">
+            <i class="fas fa-arrow-right text-success" style="font-size:1.2rem"></i>
+            <div class="text-muted" style="font-size:.68rem;max-width:80px">Approved!<br>Skips C2</div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="detail-info-card text-center" style="min-width:150px;border:2px solid #22c55e">
+            <div class="confidence-badge c3 mx-auto mb-2" style="font-size:.8rem;padding:.4rem 1rem"><i class="fas fa-shield-alt"></i> C3</div>
+            <div class="fw-bold small">Actively Maintained</div>
+            <div class="text-muted" style="font-size:.72rem">Highest trust — direct</div>
+          </div>
+        </div>
+      </div>
+      <p class="text-muted small mt-3 text-center" style="max-width:600px;margin:0 auto">
+        <i class="fas fa-bolt text-accent me-1"></i>
+        Masjid Admins who upload a letterhead, registration certificate, or official document can
+        <strong>bypass C2 entirely</strong> and go straight to C3 once the document is approved by our review team.
+      </p>
+    </div>
+
+    <!-- Decay Process -->
+    <div class="fade-up">
+      <h5 class="fw-bold mb-3" style="color:var(--primary-dark)">
+        <i class="fas fa-hourglass-half text-accent me-2"></i>Confidence Decay &amp; Maintenance
+      </h5>
+      <div class="detail-info-card">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <h6 class="fw-bold"><i class="fas fa-clock text-warning me-1"></i> How Decay Works</h6>
+            <p class="text-muted small" style="line-height:1.8">
+              Trust is not permanent. If a masjid's confidence is not maintained, it naturally decays over time:
+            </p>
+            <ul class="text-muted small" style="line-height:2">
+              <li><strong>C3 → C2</strong>: Decays after <strong>90 days</strong> (3 months) of no admin login</li>
+              <li><strong>C2 → C1</strong>: Decays after <strong>180 days</strong> (6 months)</li>
+              <li><strong>C1 → C0</strong>: Decays after <strong>365 days</strong> (1 year)</li>
+              <li><strong>C0</strong>: Does not decay further — remains in registry</li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <h6 class="fw-bold"><i class="fas fa-sync-alt text-success me-1"></i> How to Maintain C3</h6>
+            <p class="text-muted small" style="line-height:1.8">
+              To keep a masjid at C3 (Actively Maintained), the Masjid Admin must:
+            </p>
+            <ul class="text-muted small" style="line-height:2">
+              <li><strong>Log in at least once every 3 months</strong> — this confirms active management</li>
+              <li>Optionally update prayer times or send admin signals to demonstrate ongoing engagement</li>
+              <li>If 90 days pass without an admin login, the masjid drops from C3 to C2</li>
+              <li>Further inactivity continues the decay chain: C2→C1→C0</li>
+            </ul>
+            <p class="text-muted small" style="line-height:1.8">
+              <i class="fas fa-lightbulb text-accent me-1"></i>
+              <strong>Tip:</strong> Simply logging into Al-Minār every few months is enough to maintain C3 status.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Features ===== -->
+<section class="py-5">
+  <div class="container">
+    <div class="section-heading fade-up">
+      <div class="section-tag">Key Features</div>
+      <h2>What Makes Al-Minār Different</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="about-feature">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+          <h5>Confidence System</h5>
+          <p>Multi-tiered trust levels (C0–C3) that improve over time with community and admin signals.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="about-feature">
+          <div class="feature-icon"><i class="fas fa-certificate"></i></div>
+          <h5>Verified Badges</h5>
+          <p>Publicly verifiable badges with unique tokens that masjids can embed on their own websites.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="about-feature">
+          <div class="feature-icon"><i class="fas fa-clock"></i></div>
+          <h5>Flexible Prayer Times</h5>
+          <p>Admins can upload adhan, iqama, or both — no fixed format. Fill in what you know.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="about-feature">
+          <div class="feature-icon"><i class="fas fa-broadcast-tower"></i></div>
+          <h5>Signal System</h5>
+          <p>Community members send signals that automatically upgrade a masjid's confidence level.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="about-feature">
+          <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+          <h5>Document Verification</h5>
+          <p>Masjid admins can upload official documents to fast-track straight to C3.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="about-feature">
+          <div class="feature-icon"><i class="fas fa-code"></i></div>
+          <h5>Open REST API</h5>
+          <p>Full REST API with JWT authentication — build your own apps on top of the registry.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="py-5" style="background:linear-gradient(135deg, var(--primary-dark), var(--primary))">
+  <div class="container text-center fade-up">
+    <h2 class="text-white fw-bold mb-3">Ready to Explore?</h2>
+    <p class="text-white-50 mb-4">Discover masjids in your area and see the trust system in action.</p>
+    <div class="d-flex flex-wrap gap-3 justify-content-center">
+      <a href="{% url 'explore' %}" class="btn btn-al-primary btn-lg">
+        <i class="fas fa-compass me-2"></i>Explore Masjids
+      </a>
+      <a href="{% url 'report' %}" class="btn btn-al-outline btn-lg" style="border-color:rgba(212,175,55,.5)">
+        <i class="fas fa-plus-circle me-2"></i>Report a Masjid
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

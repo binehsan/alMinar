@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Al-Minār{% endblock %} — The Global Masjid Registry</title>
+  <meta name="description" content="{% block meta_desc %}Al-Minār — A trusted, open-source global masjid registry and confidence infrastructure.{% endblock %}">
+
+  <!-- Bootstrap 5.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Leaflet (maps) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Brand CSS -->
+  <link rel="stylesheet" href="{% static 'css/brand.css' %}">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- ===== Navbar ===== -->
+  <nav class="al-navbar navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'img/2.png' %}" alt="Al-Minār Logo">
+        Al-Minār
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+              <i class="fas fa-home me-1"></i>Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">
+              <i class="fas fa-info-circle me-1"></i>About
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'report' %}active{% endif %}" href="{% url 'report' %}">
+              <i class="fas fa-plus-circle me-1"></i>Report
+            </a>
+          </li>
+
+          <!-- Auth: logged-out state -->
+          {% if not user.is_authenticated %}
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-al-outline btn-sm px-3" href="{% url 'login' %}" style="border-color:rgba(212,175,55,.5)">
+              <i class="fas fa-sign-in-alt me-1"></i>Login
+            </a>
+          </li>
+          {% endif %}
+
+          <!-- Auth: logged-in state -->
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown ms-lg-2">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="user-avatar"><i class="fas fa-user"></i></span>
+              <span class="user-display-name">{{ user.username }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end al-dropdown">
+              <li><span class="dropdown-item-text small text-muted">
+                {% if user.profile.role == 'masjid_admin' %}Masjid Admin{% else %}Regular User{% endif %}
+              </span></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+              <li><a class="dropdown-item" href="{% url 'report' %}"><i class="fas fa-plus-circle me-2"></i>Report Masjid</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+          {% endif %}
+
+          <li class="nav-item ms-lg-1">
+            <a class="btn btn-al-primary btn-sm px-3" href="/admin/">
+              <i class="fas fa-lock me-1"></i>Admin
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Main Content ===== -->
+  <main>
+    {% if messages %}
+    <div class="container mt-5 pt-4">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="border-radius:var(--radius)">
+        {% if message.tags == 'error' %}<i class="fas fa-exclamation-circle me-2"></i>
+        {% elif message.tags == 'success' %}<i class="fas fa-check-circle me-2"></i>
+        {% else %}<i class="fas fa-info-circle me-2"></i>{% endif %}
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="al-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="footer-brand">
+            <img src="{% static 'img/2.png' %}" alt="Al-Minār">
+          </div>
+          <p style="font-size:.88rem;max-width:300px">
+            A trusted, open-source global masjid registry and confidence infrastructure for the Muslim community.
+          </p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h6>Navigate</h6>
+          <a href="{% url 'home' %}">Home</a>
+          <a href="{% url 'explore' %}">Explore</a>
+          <a href="{% url 'report' %}">Report Masjid</a>
+          <a href="{% url 'about' %}">About</a>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h6>Account</h6>
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}">Register</a>
+          <a href="/api/">API</a>
+          <a href="/admin/">Admin</a>
+        </div>
+        <div class="col-lg-4">
+          <h6>About Al-Minār</h6>
+          <p style="font-size:.85rem">
+            Al-Minār (المنار) — "The Lighthouse". A beacon for the global Muslim community,
+            providing a transparent, trust-verified registry of masjids worldwide.
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2026 Al-Minār Project. Built with <i class="fas fa-heart text-accent"></i> for the Ummah.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- App JS -->
+  <script src="{% static 'js/app.js' %}"></script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

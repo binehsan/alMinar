@@ -1,0 +1,380 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}Masjid Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Dashboard Hero -->
+<section style="background:linear-gradient(135deg, var(--primary-dark), var(--primary));padding:7rem 0 3rem">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3">
+      <div class="user-avatar" style="width:56px;height:56px;font-size:1.3rem;background:rgba(212,175,55,.3)">
+        <i class="fas fa-mosque"></i>
+      </div>
+      <div>
+        <h2 class="text-white fw-bold mb-0">Welcome, {{ user.username }}</h2>
+        <span class="badge" style="background:rgba(212,175,55,.3);color:var(--accent-light)">
+          <i class="fas fa-mosque me-1"></i>Masjid Admin
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-4" style="margin-top:-1.5rem;position:relative;z-index:10">
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- Left Column -->
+      <div class="col-lg-8">
+
+        <!-- Add a New Masjid -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-plus-circle text-accent me-2"></i>ADD A NEW MASJID</h6>
+          <form method="post" action="{% url 'add-masjid' %}">
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Masjid Name *</label>
+                <input type="text" name="name" class="form-control auth-input" placeholder="e.g. Masjid Al-Noor" required style="padding-left:1rem">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" style="font-size:.85rem">City *</label>
+                <input type="text" name="city" class="form-control auth-input" placeholder="e.g. London" required style="padding-left:1rem">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Description</label>
+                <textarea name="description" class="form-control auth-input" rows="2" placeholder="Brief description..." style="padding-left:1rem"></textarea>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Country *</label>
+                <select name="country" class="form-select auth-input" required style="padding-left:1rem">
+                  <option value="">Select country...</option>
+                  <option value="PK - Islamic Republic of Pakistan">PK - Pakistan</option>
+                  <option value="UK - United Kingdom of Great Britain and Northern Ireland">UK - United Kingdom</option>
+                  <option value="US - United States of America">US - United States</option>
+                  <option value="CA - Canada">CA - Canada</option>
+                  <option value="AU - Commonwealth of Australia">AU - Australia</option>
+                  <option value="SA - Kingdom of Saudi Arabia">SA - Saudi Arabia</option>
+                  <option value="AE - United Arab Emirates">AE - UAE</option>
+                  <option value="EG - Arab Republic of Egypt">EG - Egypt</option>
+                  <option value="MY - Malaysia">MY - Malaysia</option>
+                  <option value="ID - Republic of Indonesia">ID - Indonesia</option>
+                  <option value="IN - Republic of India">IN - India</option>
+                  <option value="BD - People's Republic of Bangladesh">BD - Bangladesh</option>
+                  <option value="TR - Republic of Türkiye">TR - Türkiye</option>
+                  <option value="DE - Federal Republic of Germany">DE - Germany</option>
+                  <option value="FR - French Republic">FR - France</option>
+                  <option value="NG - Federal Republic of Nigeria">NG - Nigeria</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Region / State</label>
+                <input type="text" name="region" class="form-control auth-input" placeholder="e.g. Greater London" style="padding-left:1rem">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Latitude *</label>
+                <input type="number" step="any" name="latitude" class="form-control auth-input" placeholder="51.5074" required style="padding-left:1rem">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Longitude *</label>
+                <input type="number" step="any" name="longitude" class="form-control auth-input" placeholder="-0.1278" required style="padding-left:1rem">
+              </div>
+              <div class="col-md-6 d-flex align-items-end">
+                <button type="submit" class="btn btn-al-primary w-100">
+                  <i class="fas fa-plus me-2"></i>Add Masjid
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Your Managed Masjids -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-mosque text-accent me-2"></i>YOUR MANAGED MASJIDS</h6>
+          {% if admin_links %}
+          {% for link in admin_links %}
+          <div class="d-flex align-items-center gap-3 py-3 {% if not forloop.last %}border-bottom{% endif %}">
+            <div style="width:44px;height:44px;border-radius:12px;background:rgba(184,134,11,.1);display:flex;align-items:center;justify-content:center">
+              <i class="fas fa-mosque text-primary-brand"></i>
+            </div>
+            <div class="flex-fill">
+              <div class="d-flex align-items-center gap-2">
+                <a href="{% url 'masjid-detail' link.masjid.masjidID %}" class="fw-bold" style="font-size:.95rem">
+                  {{ link.masjid.name }}
+                </a>
+                {% if link.masjid.confidence_record %}
+                <span class="confidence-badge c{{ link.masjid.confidence_record.confidenceLevel }}">
+                  C{{ link.masjid.confidence_record.confidenceLevel }}
+                </span>
+                {% else %}
+                <span class="confidence-badge c0">C0</span>
+                {% endif %}
+              </div>
+              {% if link.masjid.location_record %}
+              <small class="text-muted">
+                <i class="fas fa-map-marker-alt me-1"></i>
+                {{ link.masjid.location_record.city }}, {{ link.masjid.location_record.country }}
+              </small>
+              {% endif %}
+              <div class="mt-1">
+                {% if link.verifiedIdentity %}
+                <span class="badge bg-success"><i class="fas fa-check me-1"></i>Identity Verified</span>
+                {% else %}
+                <span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i>Pending Verification</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="text-muted text-center py-3 mb-0">You haven't registered any masjids yet. Use the form above to add one.</p>
+          {% endif %}
+        </div>
+
+        <!-- Send Admin Signal -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-broadcast-tower text-accent me-2"></i>SEND ADMIN SIGNAL</h6>
+
+        <!-- Upload Prayer Times -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-clock text-accent me-2"></i>UPDATE PRAYER TIMES</h6>
+          <p class="text-muted" style="font-size:.82rem">
+            Fill in whichever prayer times you know — you don't need to fill all fields.
+            Adhan and/or Iqama times are both optional per prayer.
+          </p>
+          {% if admin_links %}
+          <form method="post" action="{% url 'upload-prayer-times' %}">
+            {% csrf_token %}
+            <div class="row g-3 mb-3">
+              <div class="col-md-4">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Masjid</label>
+                <select name="masjid_id" class="form-select auth-input" required style="padding-left:1rem">
+                  {% for link in admin_links %}
+                  <option value="{{ link.masjid.masjidID }}">{{ link.masjid.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Date</label>
+                <input type="date" name="date" class="form-control auth-input" style="padding-left:1rem">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Type</label>
+                <select name="model_type" class="form-select auth-input" style="padding-left:1rem">
+                  <option value="FULL_TIMETABLE">Full Timetable</option>
+                  <option value="IQAMA_ONLY">Iqama Only</option>
+                  <option value="ADHAN_ONLY">Adhan Only</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-3" style="font-size:.85rem">
+                <thead>
+                  <tr class="text-muted">
+                    <th style="width:25%">Prayer</th>
+                    <th style="width:37.5%">Adhan Time</th>
+                    <th style="width:37.5%">Iqama Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for prayer in "fajr,dhuhr,asr,maghrib,isha" %}
+                  {% with p=prayer %}
+                  <tr>
+                    <td class="fw-semibold text-capitalize">
+                      {% if p == "fajr" %}<i class="fas fa-sun text-warning me-1" style="font-size:.7rem"></i>
+                      {% elif p == "dhuhr" %}<i class="fas fa-sun text-accent me-1" style="font-size:.7rem"></i>
+                      {% elif p == "asr" %}<i class="fas fa-cloud-sun text-info me-1" style="font-size:.7rem"></i>
+                      {% elif p == "maghrib" %}<i class="fas fa-moon text-danger me-1" style="font-size:.7rem"></i>
+                      {% elif p == "isha" %}<i class="fas fa-moon text-primary me-1" style="font-size:.7rem"></i>
+                      {% endif %}
+                      {{ p }}
+                    </td>
+                    <td><input type="time" name="{{ p }}_adhan" class="form-control form-control-sm"></td>
+                    <td><input type="time" name="{{ p }}_iqama" class="form-control form-control-sm"></td>
+                  </tr>
+                  {% endwith %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            <button type="submit" class="btn btn-al-primary btn-sm w-100">
+              <i class="fas fa-save me-1"></i>Save Prayer Times
+            </button>
+          </form>
+          {% else %}
+          <p class="text-muted text-center py-3 mb-0">Add a masjid first to update prayer times.</p>
+          {% endif %}
+        </div>
+
+        <!-- Send Admin Signal (continued) -->
+          <p class="text-muted" style="font-size:.85rem">Send an admin verification signal to boost a masjid's confidence level.</p>
+          <form method="post" action="{% url 'send-signal' %}">
+            {% csrf_token %}
+            <div class="row g-2 align-items-end">
+              <div class="col-md-5">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Select Masjid</label>
+                <select name="masjid_id" class="form-select auth-input masjid-search-select" required style="padding-left:1rem">
+                  <option value="">Search masjid...</option>
+                  {% for m in all_masjids %}
+                  <option value="{{ m.masjidID }}">{{ m.name }}{% if m.location_record %} — {{ m.location_record.city }}{% endif %}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Signal Type</label>
+                <select name="signal_type" class="form-select auth-input" style="padding-left:1rem">
+                  <option value="ADMIN_VERIFY">Admin Verification</option>
+                  <option value="ACTIVE">Confirm Active</option>
+                  <option value="JUMMAH">Jummah Observed</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-al-primary btn-sm w-100">
+                  <i class="fas fa-paper-plane me-1"></i>Send
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-lg-4">
+
+        <!-- Upload Verification Document -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-file-upload text-accent me-2"></i>UPLOAD VERIFICATION DOC</h6>
+          <p class="text-muted" style="font-size:.82rem">
+            Upload a masjid letterhead, registration certificate, or other identity document for verification by our team.
+          </p>
+          {% if admin_links %}
+          <form method="post" action="{% url 'upload-document' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem">For Masjid</label>
+              <select name="masjid_admin_link_id" class="form-select auth-input" required style="padding-left:1rem">
+                {% for link in admin_links %}
+                <option value="{{ link.masjidAdminID }}">{{ link.masjid.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem">Document</label>
+              <input type="file" name="document" class="form-control auth-input" accept=".pdf,.jpg,.jpeg,.png" required style="padding-left:1rem">
+              <small class="text-muted">PDF, JPG or PNG. Max 5 MB.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem">Description</label>
+              <input type="text" name="description" class="form-control auth-input" placeholder="e.g. Masjid registration certificate" style="padding-left:1rem">
+            </div>
+            <button type="submit" class="btn btn-al-primary btn-sm w-100">
+              <i class="fas fa-cloud-upload-alt me-1"></i>Upload Document
+            </button>
+          </form>
+          {% else %}
+          <p class="text-muted text-center py-3 mb-0">Add a masjid first to upload documents.</p>
+          {% endif %}
+        </div>
+
+        <!-- Uploaded Documents -->
+        <div class="detail-info-card mb-4">
+          <h6><i class="fas fa-file-alt text-accent me-2"></i>YOUR DOCUMENTS</h6>
+          {% if docs %}
+          {% for doc in docs %}
+          <div class="d-flex align-items-center gap-3 py-2 {% if not forloop.last %}border-bottom{% endif %}">
+            <div style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+              {% if doc.approved %}background:#D1FAE5;color:#065F46{% elif doc.reviewed %}background:#FEE2E2;color:#991B1B{% else %}background:#FEF3C7;color:#92400E{% endif %}">
+              <i class="fas {% if doc.approved %}fa-check{% elif doc.reviewed %}fa-times{% else %}fa-clock{% endif %}"></i>
+            </div>
+            <div class="flex-fill">
+              <div class="fw-semibold" style="font-size:.82rem">
+                {{ doc.description|default:"Document" }} — {{ doc.masjid_admin_link.masjid.name }}
+              </div>
+              <small class="text-muted">
+                {% if doc.approved %}Approved{% elif doc.reviewed %}Rejected{% else %}Pending review{% endif %}
+                · {{ doc.created_at|date:"M d, Y" }}
+              </small>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="text-muted text-center py-3 mb-0">No documents uploaded yet.</p>
+          {% endif %}
+        </div>
+
+        <!-- Quick Links -->
+        <div class="detail-info-card">
+          <h6><i class="fas fa-link text-accent me-2"></i>QUICK LINKS</h6>
+          <a href="{% url 'explore' %}" class="d-block py-2 border-bottom" style="font-size:.88rem">
+            <i class="fas fa-compass text-accent me-2"></i>Explore Masjids
+          </a>
+          <a href="{% url 'report' %}" class="d-block py-2 border-bottom" style="font-size:.88rem">
+            <i class="fas fa-plus-circle text-accent me-2"></i>Report a Masjid
+          </a>
+          <a href="/admin/" class="d-block py-2" style="font-size:.88rem">
+            <i class="fas fa-lock text-accent me-2"></i>Django Admin
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.masjid-search-select').forEach(sel => {
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'relative';
+  sel.parentNode.insertBefore(wrapper, sel);
+  wrapper.appendChild(sel);
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'form-control auth-input';
+  input.placeholder = 'Type to search masjid...';
+  input.style.paddingLeft = '1rem';
+  input.autocomplete = 'off';
+
+  const dropdown = document.createElement('div');
+  dropdown.style.cssText = 'position:absolute;top:100%;left:0;right:0;max-height:200px;overflow-y:auto;background:#fff;border:1px solid var(--border);border-radius:0 0 12px 12px;z-index:999;display:none;box-shadow:0 8px 24px rgba(0,0,0,.12)';
+
+  wrapper.appendChild(input);
+  wrapper.appendChild(dropdown);
+  sel.style.display = 'none';
+
+  const options = Array.from(sel.options).filter(o => o.value);
+
+  function renderOptions(filter) {
+    const q = filter.toLowerCase();
+    const matches = q ? options.filter(o => o.textContent.toLowerCase().includes(q)) : options;
+    dropdown.innerHTML = matches.slice(0, 50).map(o =>
+      `<div class="px-3 py-2" style="cursor:pointer;font-size:.85rem;border-bottom:1px solid rgba(0,0,0,.05)" data-val="${o.value}">${o.textContent}</div>`
+    ).join('') || '<div class="px-3 py-2 text-muted" style="font-size:.85rem">No results</div>';
+    dropdown.style.display = matches.length || q ? 'block' : 'none';
+  }
+
+  input.addEventListener('focus', () => renderOptions(input.value));
+  input.addEventListener('input', () => renderOptions(input.value));
+  dropdown.addEventListener('click', e => {
+    const item = e.target.closest('[data-val]');
+    if (item) {
+      sel.value = item.dataset.val;
+      input.value = item.textContent;
+      dropdown.style.display = 'none';
+    }
+  });
+  document.addEventListener('click', e => {
+    if (!wrapper.contains(e.target)) dropdown.style.display = 'none';
+  });
+});
+</script>
+{% endblock %}

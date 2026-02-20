@@ -1,0 +1,74 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}Explore Masjids{% endblock %}
+
+{% block content %}
+
+<!-- ===== Page Header ===== -->
+<section style="background:linear-gradient(135deg, var(--primary-dark), var(--primary));padding:7rem 0 3rem">
+  <div class="container text-center">
+    <h1 class="text-white fw-bold mb-2">Explore Masjids</h1>
+    <p class="text-white-50 mx-auto" style="max-width:500px">
+      Search, filter and discover masjids from around the world on our interactive map.
+    </p>
+  </div>
+</section>
+
+<!-- ===== Search & Filters ===== -->
+<section style="margin-top:-2rem;position:relative;z-index:10">
+  <div class="container">
+    <form id="explore-search-form" class="search-bar-wrapper mb-4">
+      <i class="fas fa-search ms-3 text-muted"></i>
+      <input type="text" id="explore-search" placeholder="Search masjids by name..." autocomplete="off">
+      <button type="submit" class="btn-search">
+        <i class="fas fa-search"></i> Search
+      </button>
+    </form>
+
+    <div class="explore-controls">
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+        <span class="text-muted fw-semibold small me-2"><i class="fas fa-filter me-1"></i> Confidence:</span>
+        <span class="filter-chip" data-confidence="0"><i class="fas fa-circle"></i> C0</span>
+        <span class="filter-chip" data-confidence="1"><i class="fas fa-users"></i> C1</span>
+        <span class="filter-chip" data-confidence="2"><i class="fas fa-check-circle"></i> C2</span>
+        <span class="filter-chip" data-confidence="3"><i class="fas fa-shield-alt"></i> C3</span>
+      </div>
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <span class="text-muted fw-semibold small me-2"><i class="fas fa-globe me-1"></i> Region:</span>
+        <span class="filter-chip active" data-country="">All</span>
+        <span class="filter-chip" data-country="GB - United Kingdom of Great Britain and Northern Ireland">UK</span>
+        <span class="filter-chip" data-country="US - United States of America">USA</span>
+        <span class="filter-chip" data-country="SA - Kingdom of Saudi Arabia">Saudi Arabia</span>
+        <span class="filter-chip" data-country="EG - Arab Republic of Egypt">Egypt</span>
+        <span class="filter-chip" data-country="PK - Islamic Republic of Pakistan">Pakistan</span>
+        <span class="filter-chip" data-country="IN - Republic of India">India</span>
+        <span class="filter-chip" data-country="MY - Malaysia">Malaysia</span>
+        <span class="filter-chip" data-country="TR - Republic of Türkiye">Turkey</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Map ===== -->
+<section class="pb-4">
+  <div class="container">
+    <div id="map-container"></div>
+  </div>
+</section>
+
+<!-- ===== Results ===== -->
+<section class="pb-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <p id="result-count" class="text-muted mb-0 fw-semibold small">Loading...</p>
+    </div>
+    <div class="row" id="explore-grid">
+      <div class="col-12 text-center py-5">
+        <div class="al-spinner"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

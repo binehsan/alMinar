@@ -1,7 +1,8 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
+
 from .models import (
-    AdminUser,
-    RegularUser,
+    UserProfile,
     Masjid,
     ConfidenceRecord,
     LocationRecord,
@@ -12,34 +13,70 @@ from .models import (
     VerifiedBadge,
     MasjidAdmin,
     FavouriteMasjid,
+    VerificationDocument,
 )
 
 
-class AdminUserSerializer(serializers.ModelSerializer):
+# ---------------------------------------------------------------------------
+# Auth
+# ---------------------------------------------------------------------------
+
+class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AdminUser
-        fields = ["username", "email", "created_at", "updated_at"]
+        model = UserProfile
+        fields = ["role", "created_at", "updated_at"]
         read_only_fields = ["created_at", "updated_at"]
 
 
-class RegularUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RegularUser
-        fields = ["username", "email", "created_at", "updated_at"]
-        read_only_fields = ["created_at", "updated_at"]
+class UserSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer(read_only=True)
 
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "profile"]
+        read_only_fields = ["id"]
+
+
+class RegisterSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=150)
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True, min_length=8)
+    role = serializers.ChoiceField(
+        choices=UserProfile.ROLE_CHOICES, default="user"
+    )
+
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("Username already taken.")
+        return value
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Email already registered.")
+        return value
+
+    def create(self, validated_data):
+        role = validated_data.pop("role", "user")
+        user = User.objects.create_user(
+            username=validated_data["username"],
+            email=validated_data["email"],
+            password=validated_data["password"],
+        )
+        UserProfile.objects.create(user=user, role=role)
+        return user
+
+
+# ---------------------------------------------------------------------------
+# Core models
+# ---------------------------------------------------------------------------
 
 class ConfidenceRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConfidenceRecord
         fields = [
-            "crID",
-            "confidenceLevel",
-            "masjid",
-            "lastConfirmationDate",
-            "decayDate",
-            "created_at",
-            "updated_at",
+            "crID", "confidenceLevel", "masjid",
+            "lastConfirmationDate", "decayDate",
+            "created_at", "updated_at",
         ]
         read_only_fields = ["crID", "lastConfirmationDate", "created_at", "updated_at"]
 
@@ -48,34 +85,23 @@ class LocationRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocationRecord
         fields = [
-            "lrID",
-            "latitude",
-            "longitude",
-            "masjid",
-            "city",
-            "country",
-            "region",
-            "created_at",
-            "updated_at",
+            "lrID", "latitude", "longitude", "masjid",
+            "city", "country", "region",
+            "created_at", "updated_at",
         ]
         read_only_fields = ["lrID", "created_at", "updated_at"]
 
 
 class MasjidSerializer(serializers.ModelSerializer):
-    confidenceRecord = ConfidenceRecordSerializer(read_only=True)
-    locationRecord = LocationRecordSerializer(read_only=True)
+    confidence_record = ConfidenceRecordSerializer(read_only=True)
+    location_record = LocationRecordSerializer(read_only=True)
 
     class Meta:
         model = Masjid
         fields = [
-            "masjidID",
-            "name",
-            "description",
-            "isActive",
-            "confidenceRecord",
-            "locationRecord",
-            "created_at",
-            "updated_at",
+            "masjidID", "name", "description", "isActive",
+            "confidence_record", "location_record",
+            "created_at", "updated_at",
         ]
         read_only_fields = ["masjidID", "created_at", "updated_at"]
 
@@ -96,14 +122,10 @@ class PrayerTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrayerTime
         fields = [
-            "prayerTimeID",
-            "record",
-            "prayer",
-            "prayer_id",
-            "adhan_time",
-            "iqama_time",
-            "created_at",
-            "updated_at",
+            "prayerTimeID", "record",
+            "prayer", "prayer_id",
+            "adhan_time", "iqama_time",
+            "created_at", "updated_at",
         ]
         read_only_fields = ["prayerTimeID", "created_at", "updated_at"]
 
@@ -121,15 +143,9 @@ class PrayerTimeRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrayerTimeRecord
         fields = [
-            "ptrID",
-            "masjid",
-            "modelType",
-            "isVariable",
-            "date",
-            "lastUpdated",
-            "prayers",
-            "created_at",
-            "updated_at",
+            "ptrID", "masjid", "modelType", "isVariable",
+            "date", "lastUpdated", "prayers",
+            "created_at", "updated_at",
         ]
         read_only_fields = ["ptrID", "lastUpdated", "created_at", "updated_at"]
 
@@ -138,14 +154,9 @@ class SignalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Signal
         fields = [
-            "signalID",
-            "masjid",
-            "user",
-            "signalType",
-            "sourceType",
-            "description",
-            "created_at",
-            "updated_at",
+            "signalID", "masjid", "user",
+            "signalType", "sourceType", "description",
+            "created_at", "updated_at",
         ]
         read_only_fields = ["signalID", "created_at", "updated_at"]
 
@@ -154,17 +165,10 @@ class VerifiedBadgeSerializer(serializers.ModelSerializer):
     class Meta:
         model = VerifiedBadge
         fields = [
-            "badgeID",
-            "token",
-            "masjid",
-            "issuedBy",
-            "issueDate",
-            "expiryDate",
-            "isActive",
-            "isRevoked",
-            "lastCheckedAt",
-            "created_at",
-            "updated_at",
+            "badgeID", "token", "masjid", "issuedBy",
+            "issueDate", "expiryDate",
+            "isActive", "isRevoked", "lastCheckedAt",
+            "created_at", "updated_at",
         ]
         read_only_fields = ["badgeID", "token", "issueDate", "created_at", "updated_at"]
 
@@ -173,13 +177,9 @@ class MasjidAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = MasjidAdmin
         fields = [
-            "masjidAdminID",
-            "user",
-            "masjid",
-            "verifiedIdentity",
-            "verifiedAt",
-            "created_at",
-            "updated_at",
+            "masjidAdminID", "user", "masjid",
+            "verifiedIdentity", "verifiedAt",
+            "created_at", "updated_at",
         ]
         read_only_fields = ["masjidAdminID", "verifiedAt", "created_at", "updated_at"]
 
@@ -187,11 +187,19 @@ class MasjidAdminSerializer(serializers.ModelSerializer):
 class FavouriteMasjidSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavouriteMasjid
-        fields = [
-            "favID",
-            "user",
-            "masjid",
-            "created_at",
-            "updated_at",
-        ]
+        fields = ["favID", "user", "masjid", "created_at", "updated_at"]
         read_only_fields = ["favID", "created_at", "updated_at"]
+
+
+class VerificationDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VerificationDocument
+        fields = [
+            "docID", "masjid_admin_link", "document",
+            "description", "reviewed", "approved",
+            "review_notes", "created_at", "updated_at",
+        ]
+        read_only_fields = [
+            "docID", "reviewed", "approved",
+            "review_notes", "created_at", "updated_at",
+        ]

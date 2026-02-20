@@ -1,0 +1,121 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<section class="auth-hero">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="auth-card fade-up">
+          <div class="auth-logo text-center mb-4">
+            <img src="{% static 'img/2.png' %}" alt="Al-Minar" style="height:48px">
+            <h3 class="mt-3 fw-bold" style="color:var(--primary-dark)">Join Al-Minar</h3>
+            <p class="text-muted mb-0">Create an account to contribute to the masjid registry</p>
+          </div>
+
+          <form method="post" action="{% url 'register' %}" autocomplete="off">
+            {% csrf_token %}
+
+            <!-- Account type selector -->
+            <div class="account-type-selector mb-4">
+              <label class="fw-semibold d-block mb-2">I am registering as:</label>
+              <div class="d-flex gap-3">
+                <label class="type-option {% if form_role != 'masjid_admin' %}active{% endif %}" data-type="user">
+                  <input type="radio" name="accountType" value="user" {% if form_role != 'masjid_admin' %}checked{% endif %} class="d-none">
+                  <div class="type-card">
+                    <i class="fas fa-user"></i>
+                    <strong>Regular User</strong>
+                    <small>Report &amp; verify masjids</small>
+                  </div>
+                </label>
+                <label class="type-option {% if form_role == 'masjid_admin' %}active{% endif %}" data-type="masjid_admin">
+                  <input type="radio" name="accountType" value="masjid_admin" {% if form_role == 'masjid_admin' %}checked{% endif %} class="d-none">
+                  <div class="type-card">
+                    <i class="fas fa-mosque"></i>
+                    <strong>Masjid Admin</strong>
+                    <small>Manage your masjid</small>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-12">
+                <label for="reg-username" class="form-label fw-semibold">Username</label>
+                <div class="input-icon-wrapper">
+                  <i class="fas fa-user"></i>
+                  <input type="text" class="form-control auth-input" id="reg-username"
+                         name="username" placeholder="Choose a username" required minlength="3"
+                         value="{{ form_username|default:'' }}" autocomplete="username">
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label for="reg-email" class="form-label fw-semibold">Email</label>
+                <div class="input-icon-wrapper">
+                  <i class="fas fa-envelope"></i>
+                  <input type="email" class="form-control auth-input" id="reg-email"
+                         name="email" placeholder="you@example.com" required
+                         value="{{ form_email|default:'' }}" autocomplete="email">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="reg-password" class="form-label fw-semibold">Password</label>
+                <div class="input-icon-wrapper">
+                  <i class="fas fa-lock"></i>
+                  <input type="password" class="form-control auth-input" id="reg-password"
+                         name="password" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="reg-confirm" class="form-label fw-semibold">Confirm Password</label>
+                <div class="input-icon-wrapper">
+                  <i class="fas fa-lock"></i>
+                  <input type="password" class="form-control auth-input" id="reg-confirm"
+                         name="confirm" placeholder="Repeat password" required minlength="8" autocomplete="new-password">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-check mt-3 mb-4">
+              <input class="form-check-input" type="checkbox" id="reg-terms" required>
+              <label class="form-check-label text-muted" for="reg-terms" style="font-size:.85rem">
+                I agree to contribute honestly and follow the community guidelines
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-al-primary w-100">
+              <i class="fas fa-user-plus me-2"></i>Create Account
+            </button>
+          </form>
+
+          <div class="auth-divider">
+            <span>Already have an account?</span>
+          </div>
+
+          <a href="{% url 'login' %}" class="btn btn-al-outline-dark w-100">
+            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.querySelectorAll('.type-option').forEach(option => {
+    option.addEventListener('click', () => {
+      document.querySelectorAll('.type-option').forEach(o => o.classList.remove('active'));
+      option.classList.add('active');
+    });
+  });
+</script>
+{% endblock %}

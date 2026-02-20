@@ -1,0 +1,202 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- ===== Hero ===== -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 position-relative" style="z-index:2">
+        <div class="hero-badge">
+          <i class="fas fa-mosque"></i>
+          Global Masjid Registry
+        </div>
+        <h1>
+          Discover &amp; Trust<br>
+          Your Local <span>Masjid</span>
+        </h1>
+        <p class="lead">
+          Al-Minār is a transparent, community-driven registry that helps you find masjids 
+          and verify their authenticity through our confidence system.
+        </p>
+        <div class="d-flex flex-wrap gap-3 mb-3">
+          <a href="{% url 'explore' %}" class="btn btn-al-primary">
+            <i class="fas fa-compass me-2"></i>Explore Masjids
+          </a>
+          <a href="{% url 'about' %}" class="btn btn-al-outline">
+            Learn More <i class="fas fa-arrow-right ms-2"></i>
+          </a>
+        </div>
+
+        <div class="stat-strip">
+          <div class="stat-item">
+            <div class="stat-number">{{ masjid_count }}</div>
+            <div class="stat-label">Masjids</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ country_count }}</div>
+            <div class="stat-label">Countries</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ verified_count }}</div>
+            <div class="stat-label">Verified</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 text-center mt-4 mt-lg-0">
+        <img src="{% static 'img/1.png' %}" alt="Al-Minār" class="hero-logo">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Search Bar ===== -->
+<section class="py-5" style="margin-top:-2.5rem;position:relative;z-index:10">
+  <div class="container">
+    <form id="hero-search-form" class="search-bar-wrapper">
+      <i class="fas fa-search ms-3 text-muted"></i>
+      <input type="text" placeholder="Search masjids by name, city or country..." autocomplete="off">
+      <button type="submit" class="btn-search">
+        <i class="fas fa-search"></i> Search
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ===== Confidence System ===== -->
+<section class="py-5 bg-surface">
+  <div class="container">
+    <div class="section-heading fade-up">
+      <div class="section-tag">Trust Infrastructure</div>
+      <h2>Our Confidence System</h2>
+      <p>Every masjid earns its trust level through community verification and admin signals.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3 fade-up">
+        <div class="text-center p-4">
+          <div class="confidence-badge c0 mx-auto mb-3" style="font-size:.85rem;padding:.5rem 1.25rem">
+            <i class="fas fa-circle"></i> C0
+          </div>
+          <h6 class="fw-bold">Community Reported</h6>
+          <p class="text-muted small mb-0">New entry — basic presence reported by community members.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 fade-up">
+        <div class="text-center p-4">
+          <div class="confidence-badge c1 mx-auto mb-3" style="font-size:.85rem;padding:.5rem 1.25rem">
+            <i class="fas fa-users"></i> C1
+          </div>
+          <h6 class="fw-bold">Community Confirmed</h6>
+          <p class="text-muted small mb-0">3+ unique users have confirmed this masjid within 30 days.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 fade-up">
+        <div class="text-center p-4">
+          <div class="confidence-badge c2 mx-auto mb-3" style="font-size:.85rem;padding:.5rem 1.25rem">
+            <i class="fas fa-check-circle"></i> C2
+          </div>
+          <h6 class="fw-bold">Masjid Verified</h6>
+          <p class="text-muted small mb-0">Verified by an admin — masjid identity confirmed.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 fade-up">
+        <div class="text-center p-4">
+          <div class="confidence-badge c3 mx-auto mb-3" style="font-size:.85rem;padding:.5rem 1.25rem">
+            <i class="fas fa-shield-alt"></i> C3
+          </div>
+          <h6 class="fw-bold">Actively Maintained</h6>
+          <p class="text-muted small mb-0">Highest trust — actively maintained with regular updates.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Featured Masjids ===== -->
+<section class="py-5">
+  <div class="container">
+    <div class="section-heading fade-up">
+      <div class="section-tag">Discover</div>
+      <h2>Recently Added Masjids</h2>
+      <p>The latest masjids added to the global registry.</p>
+    </div>
+    <div class="row" id="featured-grid">
+      <!-- Loaded by JS -->
+      {% for m in featured %}
+      <div class="col-md-6 col-lg-4 mb-4 fade-up">
+        <div class="masjid-card">
+          <div class="card-header-band"></div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="mb-0">{{ m.name }}</h5>
+              {% if m.confidence_record %}
+                {% with level=m.confidence_record.confidenceLevel %}
+                  <span class="confidence-badge c{{ level }}">
+                    {% if level == 0 %}<i class="fas fa-circle"></i> C0
+                    {% elif level == 1 %}<i class="fas fa-users"></i> C1
+                    {% elif level == 2 %}<i class="fas fa-check-circle"></i> C2
+                    {% elif level == 3 %}<i class="fas fa-shield-alt"></i> C3
+                    {% endif %}
+                  </span>
+                {% endwith %}
+              {% else %}
+                <span class="confidence-badge c0"><i class="fas fa-circle"></i> C0</span>
+              {% endif %}
+            </div>
+            <div class="card-location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>
+                {% if m.location_record %}
+                  {{ m.location_record.city }}{% if m.location_record.city and m.location_record.country %}, {% endif %}{{ m.location_record.country }}
+                {% else %}
+                  Location unknown
+                {% endif %}
+              </span>
+            </div>
+            <p class="card-desc">{{ m.description|default:"No description available." }}</p>
+          </div>
+          <div class="card-footer-area">
+            <small class="text-muted">
+              {% if m.isActive %}
+                <i class="fas fa-circle text-success" style="font-size:.5rem"></i> Active
+              {% else %}
+                <i class="fas fa-circle text-danger" style="font-size:.5rem"></i> Inactive
+              {% endif %}
+            </small>
+            <a href="{% url 'masjid-detail' m.masjidID %}" class="btn-view">View Details <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <i class="fas fa-mosque text-muted" style="font-size:3rem;opacity:.3"></i>
+        <p class="text-muted mt-3">No masjids registered yet. Be the first to add one!</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-2 fade-up">
+      <a href="{% url 'explore' %}" class="btn btn-al-primary">
+        View All Masjids <i class="fas fa-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="py-5" style="background:linear-gradient(135deg, var(--primary-dark), var(--primary))">
+  <div class="container text-center fade-up">
+    <img src="{% static 'img/3.png' %}" alt="Al-Minār" style="height:60px;margin-bottom:1.5rem;filter:brightness(0) invert(1) opacity(.8)">
+    <h2 class="text-white fw-bold mb-3">Help Build the Registry</h2>
+    <p class="text-white-50 mb-4 mx-auto" style="max-width:500px">
+      Every signal strengthens trust. Verify your local masjid and contribute to the global community.
+    </p>
+    <a href="{% url 'report' %}" class="btn btn-al-primary btn-lg">
+      <i class="fas fa-plus me-2"></i>Report a Masjid
+    </a>
+  </div>
+</section>
+
+{% endblock %}
