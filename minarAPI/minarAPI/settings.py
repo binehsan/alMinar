@@ -20,12 +20,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-md#(2$x!mluuh1ajc1o3deg(u#!n4ybqo-f@gyo_kqt9ti_+g*'
+import os
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-md#(2$x!mluuh1ajc1o3deg(u#!n4ybqo-f@gyo_kqt9ti_+g*',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'alminar.app,www.alminar.app,api.alminar.app,admin.alminar.app').split(',')
 
 
 # Application definition
@@ -125,7 +129,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
@@ -169,8 +174,9 @@ REST_FRAMEWORK = {
 CORS_ALLOW_ALL_ORIGINS = DEBUG  # Lock down in production
 
 CORS_ALLOWED_ORIGINS = [
-    # Add your production React Native / web origins here
-    # "https://alminar.org",
+    "https://alminar.app",
+    "https://www.alminar.app",
+    "https://api.alminar.app",
 ]
 
 
@@ -298,3 +304,24 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
+
+
+# ---------------------------------------------------------------------------
+# Production Security Settings
+# ---------------------------------------------------------------------------
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000          # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    CSRF_TRUSTED_ORIGINS = [
+        'https://alminar.app',
+        'https://www.alminar.app',
+        'https://api.alminar.app',
+        'https://admin.alminar.app',
+    ]
