@@ -24,13 +24,17 @@
           <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
             {% if masjid.confidence_record %}
               {% with level=masjid.confidence_record.confidenceLevel %}
-              <span class="confidence-badge c{{ level }}">
-                {% if level == 0 %}<i class="fas fa-circle"></i> Community Reported
-                {% elif level == 1 %}<i class="fas fa-users"></i> Community Confirmed
-                {% elif level == 2 %}<i class="fas fa-check-circle"></i> Verified
-                {% elif level == 3 %}<i class="fas fa-shield-alt"></i> Actively Maintained
+                {% if level == 2 %}
+                  <span class="confidence-badge c2" style="background:#D1FAE5;color:#059669"><i class="fas fa-check-circle"></i> Al-Minar Verified Masjid</span>
+                {% elif level == 3 %}
+                  <span class="confidence-badge c3" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);color:#B8860B;border:1px solid #F59E0B"><i class="fas fa-shield-alt"></i> Al-Minar Verified Masjid</span>
+                {% elif level == 4 %}
+                  <span class="confidence-badge c4" style="background:linear-gradient(135deg,#FDE68A,#D4AF37);color:#D4AF37;border:1px solid #D4AF37"><i class="fas fa-crown"></i> Al-Minar Verified Masjid</span>
+                {% elif level == 1 %}
+                  <span class="confidence-badge c1"><i class="fas fa-users"></i> Community Confirmed</span>
+                {% else %}
+                  <span class="confidence-badge c0"><i class="fas fa-circle"></i> Community Reported</span>
                 {% endif %}
-              </span>
               {% endwith %}
             {% else %}
               <span class="confidence-badge c0"><i class="fas fa-circle"></i> Community Reported</span>

@@ -166,11 +166,11 @@ REST_FRAMEWORK = {
 # CORS — allow React Native dev connections
 # ---------------------------------------------------------------------------
 
-CORS_ALLOW_ALL_ORIGINS = DEBUG  # Lock down in production
-
+CORS_ALLOW_ALL_ORIGINS = True  # for development
+# or specifically:
 CORS_ALLOWED_ORIGINS = [
-    # Add your production React Native / web origins here
-    # "https://alminar.org",
+    "http://localhost:8081",
+    "http://127.0.0.1:8081",
 ]
 
 
