@@ -1,0 +1,7 @@
+Django>=4.2,<4.3
+djangorestframework>=3.14,<4
+djangorestframework-simplejwt>=5.3,<6
+django-filter>=23.0,<25
+django-cors-headers>=4.3,<5
+django-jazzmin>=2.6,<3
+gunicorn>=22.0,<23
