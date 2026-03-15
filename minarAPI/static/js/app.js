@@ -144,9 +144,22 @@ function initScrollAnimations() {
 function initNavbar() {
   const nav = document.querySelector('.al-navbar');
   if (!nav) return;
+  const collapseEl = document.getElementById('mainNav');
+
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 50);
   });
+
+  if (collapseEl && typeof bootstrap !== 'undefined') {
+    const links = collapseEl.querySelectorAll('.nav-link, .btn');
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 992 && collapseEl.classList.contains('show')) {
+          bootstrap.Collapse.getOrCreateInstance(collapseEl).hide();
+        }
+      });
+    });
+  }
 }
 
 // ---- Hero search ----

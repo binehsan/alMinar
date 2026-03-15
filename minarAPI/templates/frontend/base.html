@@ -25,10 +25,12 @@
 
   <!-- ===== Navbar ===== -->
   <nav class="al-navbar navbar navbar-expand-lg fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="{% url 'home' %}">
-        <img src="{% static 'img/2.png' %}" alt="Al-Minār Logo">
-        Al-Minār
+    <div class="navbar-art" aria-hidden="true">
+      <img src="{% static 'img/navbar.svg' %}" alt="">
+    </div>
+    <div class="container position-relative">
+      <a class="navbar-brand navbar-brand-empty" href="{% url 'home' %}" aria-label="Al-Minār Home">
+        <span class="visually-hidden">Al-Minār</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
         <span class="navbar-toggler-icon"></span>
@@ -48,6 +50,11 @@
           <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'report' %}active{% endif %}" href="{% url 'report' %}">
               <i class="fas fa-plus-circle me-1"></i>Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'support' %}active{% endif %}" href="{% url 'support' %}">
+              <i class="fas fa-hands-helping me-1"></i>Support
             </a>
           </li>
 
@@ -110,20 +117,18 @@
 
   <!-- ===== Footer ===== -->
   <footer class="al-footer">
-    <div class="container">
+    <div class="container position-relative">
       <div class="row g-4">
         <div class="col-lg-4">
-          <div class="footer-brand">
-            <img src="{% static 'img/2.png' %}" alt="Al-Minār">
+          <div class="footer-brand-mark" aria-hidden="true">
+            <img src="{% static 'img/herodesk.svg' %}" alt="">
           </div>
-          <p style="font-size:.88rem;max-width:300px">
-            A trusted, open-source global masjid registry and confidence infrastructure for the Muslim community.
-          </p>
         </div>
         <div class="col-6 col-lg-2">
           <h6>Navigate</h6>
           <a href="{% url 'home' %}">Home</a>
           <a href="{% url 'explore' %}">Explore</a>
+          <a href="{% url 'support' %}">Support Us</a>
           <a href="{% url 'report' %}">Report Masjid</a>
           <a href="{% url 'about' %}">About</a>
         </div>

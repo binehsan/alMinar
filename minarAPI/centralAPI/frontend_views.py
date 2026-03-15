@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from urllib.parse import quote
 
 from .models import (
     UserProfile,
@@ -83,6 +84,19 @@ def verify_page(request, token):
 
 def about(request):
     return render(request, "frontend/about.html")
+
+
+def support_page(request):
+    support_url = request.build_absolute_uri("/support/")
+    promo_text = "Help build Al-Minār: add local masjids, support the mission, and share with your community."
+    context = {
+        "donation_url": "https://www.paypal.com/donate",
+        "x_share_url": f"https://twitter.com/intent/tweet?text={quote(promo_text)}&url={quote(support_url)}",
+        "facebook_share_url": f"https://www.facebook.com/sharer/sharer.php?u={quote(support_url)}",
+        "linkedin_share_url": f"https://www.linkedin.com/sharing/share-offsite/?url={quote(support_url)}",
+        "whatsapp_share_url": f"https://wa.me/?text={quote(f'{promo_text} {support_url}')}",
+    }
+    return render(request, "frontend/support.html", context)
 
 
 def report_page(request):

@@ -7,6 +7,7 @@ urlpatterns = [
     path("masjid/<uuid:masjid_id>/", frontend_views.masjid_detail, name="masjid-detail"),
     path("verify/<uuid:token>/page/", frontend_views.verify_page, name="verify-page"),
     path("about/", frontend_views.about, name="about"),
+    path("support/", frontend_views.support_page, name="support"),
     path("report/", frontend_views.report_page, name="report"),
 
     # Auth

@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="col-lg-6 text-center mt-4 mt-lg-0">
-        <img src="{% static 'img/herodesk.png' %}" alt="Al-Minār" class="hero-logo">
+        <img src="{% static 'img/herodesk.svg' %}" alt="Al-Minār" class="hero-logo">
       </div>
     </div>
   </div>
@@ -188,14 +188,19 @@
 <!-- ===== CTA ===== -->
 <section class="py-5" style="background:linear-gradient(135deg, var(--primary-dark), var(--primary))">
   <div class="container text-center fade-up">
-    <img src="{% static 'img/3.png' %}" alt="Al-Minār" style="height:60px;margin-bottom:1.5rem;filter:brightness(0) invert(1) opacity(.8)">
+    <img src="{% static 'img/herodesk.svg' %}" alt="Al-Minār" style="height:72px;margin-bottom:1.5rem;filter:brightness(0) invert(1) opacity(.8)">
     <h2 class="text-white fw-bold mb-3">Help Build the Registry</h2>
     <p class="text-white-50 mb-4 mx-auto" style="max-width:500px">
       Every signal strengthens trust. Verify your local masjid and contribute to the global community.
     </p>
-    <a href="{% url 'report' %}" class="btn btn-al-primary btn-lg">
-      <i class="fas fa-plus me-2"></i>Report a Masjid
-    </a>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{% url 'report' %}" class="btn btn-al-primary btn-lg">
+        <i class="fas fa-plus me-2"></i>Report a Masjid
+      </a>
+      <a href="{% url 'support' %}" class="btn btn-al-outline btn-lg">
+        <i class="fas fa-hands-helping me-2"></i>Support Us
+      </a>
+    </div>
   </div>
 </section>
 
