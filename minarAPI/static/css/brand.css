@@ -45,6 +45,9 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
+main {
+  padding-top: 78px;
+}
 
 a { color: var(--primary); text-decoration: none; transition: var(--transition); }
 a:hover { color: var(--accent); }
@@ -825,6 +828,9 @@ img { max-width: 100%; height: auto; }
 }
 
 @media (max-width: 768px) {
+  main {
+    padding-top: 70px;
+  }
   .al-navbar {
     min-height: 70px;
     padding: .35rem 0;
@@ -847,9 +853,50 @@ img { max-width: 100%; height: auto; }
   .al-footer {
     padding-top: 1.5rem;
   }
+  .al-footer .row > div {
+    text-align: center;
+  }
   .footer-brand-mark {
     width: min(260px, 100%);
     height: 62px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-section {
+    min-height: auto;
+    padding: 2.2rem 0 2.8rem;
+    text-align: center;
+  }
+  .hero-section .hero-badge {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-section p.lead {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .stat-strip {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .support-hero {
+    padding: 3.2rem 0 2.2rem;
+    text-align: center;
+  }
+  .support-hero::before {
+    right: 50%;
+    transform: translateX(50%);
+    width: 80%;
+  }
+  .support-hero p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .support-card {
+    text-align: center;
+  }
+  .support-card .d-flex {
+    justify-content: center;
   }
   .stat-strip {
     gap: 1rem;
