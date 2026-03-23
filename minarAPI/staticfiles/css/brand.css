@@ -80,7 +80,7 @@ img { max-width: 100%; height: auto; }
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(212,175,55,.2);
-  padding: .6rem 0;
+  padding: 0;
   min-height: 80px;
   transition: var(--transition);
   position: relative;
@@ -88,32 +88,27 @@ img { max-width: 100%; height: auto; }
 }
 .al-navbar.scrolled {
   box-shadow: 0 4px 20px rgba(44,44,44,.25);
-  min-height: 72px;
+  min-height: 70px;
 }
 .al-navbar .container {
   z-index: 2;
 }
 .navbar-art {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
   z-index: 1;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0;
+  align-items: stretch;
   pointer-events: none;
-  overflow: visible;
 }
 .navbar-art img {
-  width: min(700px, 62vw);
   height: 100%;
-  max-height: none;
-  object-fit: cover;
+  width: auto;
+  max-width: 55vw;
+  object-fit: contain;
   object-position: left center;
-  opacity: 1;
-  border: 0;
-  filter: none;
-  margin-left: -1px;
 }
 .al-navbar .navbar-brand {
   display: flex;
@@ -722,29 +717,40 @@ img { max-width: 100%; height: auto; }
   z-index: 2;
 }
 .footer-brand-mark {
-  width: min(420px, 100%);
-  min-height: 100px;
-  border-radius: 0;
-  overflow: visible;
-  border: 0;
-  background: transparent;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 .footer-brand-mark img {
-  width: 100%;
-  height: auto;
-  max-height: 100px;
-  object-fit: contain;
-  object-position: left center;
-  opacity: 1;
-  border: 0;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,.3));
+  width: 56px;
+  height: 56px;
+  filter: drop-shadow(0 4px 12px rgba(212,175,55,.4));
+}
+
+/* Footer social icons */
+.footer-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.7);
+  font-size: 1rem;
+  transition: all .3s ease;
+  border: 1px solid rgba(255,255,255,.1);
+}
+.footer-social:hover {
+  background: var(--accent);
+  color: var(--white);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(212,175,55,.4);
+  border-color: var(--accent);
 }
 
 /* ---- Support page ---- */
 .support-hero {
   background: linear-gradient(135deg, var(--primary-dark) 0%, #2c2c2c 55%, var(--primary) 100%);
-  padding: 8rem 0 5rem;
+  padding: 10rem 0 5rem;
   position: relative;
   overflow: hidden;
 }
@@ -834,29 +840,28 @@ img { max-width: 100%; height: auto; }
 .support-social-btn {
   display: inline-flex;
   align-items: center;
-  gap: .5rem;
-  padding: .6rem 1rem;
-  border-radius: 50px;
-  border: 1px solid rgba(44,44,44,.12);
-  background: var(--surface);
-  color: var(--text);
-  font-size: .82rem;
-  font-weight: 600;
-  transition: var(--transition);
-}
-.support-social-btn i {
-  font-size: 1rem;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--white);
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  transition: all .3s ease;
 }
 .support-social-btn:hover {
   color: var(--white);
-  border-color: var(--primary);
-  background: var(--primary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(184,134,11,.25);
+  border-color: var(--accent);
+  background: var(--accent);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(212,175,55,.35);
 }
-.support-social-btn:hover i {
-  transform: scale(1.1);
-}
+.support-social-btn.twitter:hover { background: #1DA1F2; border-color: #1DA1F2; }
+.support-social-btn.facebook:hover { background: #1877F2; border-color: #1877F2; }
+.support-social-btn.whatsapp:hover { background: #25D366; border-color: #25D366; }
+.support-social-btn.linkedin:hover { background: #0A66C2; border-color: #0A66C2; }
+.support-social-btn.email:hover { background: var(--primary); border-color: var(--primary); }
 .al-footer h6 {
   color: var(--white);
   font-weight: 700;
@@ -1009,14 +1014,9 @@ img { max-width: 100%; height: auto; }
   .al-footer .row > div {
     text-align: center;
   }
-  .footer-brand-mark {
-    width: min(320px, 100%);
-    min-height: 85px;
-    margin-left: auto;
-    margin-right: auto;
-  }
   .footer-brand-mark img {
-    max-height: 85px;
+    width: 48px;
+    height: 48px;
   }
   .hero-section {
     min-height: auto;
@@ -1393,12 +1393,9 @@ textarea.auth-input {
   .verified-shield .shield-label {
     font-size: .5rem;
   }
-  .footer-brand-mark {
-    width: min(280px, 100%);
-    min-height: 75px;
-  }
   .footer-brand-mark img {
-    max-height: 75px;
+    width: 44px;
+    height: 44px;
   }
   .section-heading h2 {
     font-size: 1.4rem;
