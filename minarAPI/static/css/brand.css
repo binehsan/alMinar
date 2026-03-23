@@ -46,7 +46,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 main {
-  padding-top: 78px;
+  padding-top: 70px;
 }
 
 a { color: var(--primary); text-decoration: none; transition: var(--transition); }
@@ -77,55 +77,39 @@ img { max-width: 100%; height: auto; }
 /* ---- Navbar ---- */
 .al-navbar {
   background: #2c2c2c;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(212,175,55,.2);
-  padding: 0;
-  min-height: 80px;
+  padding: .5rem 0;
   transition: var(--transition);
-  position: relative;
-  overflow: visible;
 }
 .al-navbar.scrolled {
   box-shadow: 0 4px 20px rgba(44,44,44,.25);
-  min-height: 70px;
-}
-.al-navbar .container {
-  z-index: 2;
-}
-.navbar-art {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 1;
-  display: flex;
-  align-items: stretch;
-  pointer-events: none;
-}
-.navbar-art img {
-  height: 100%;
-  width: auto;
-  max-width: 55vw;
-  object-fit: contain;
-  object-position: left center;
 }
 .al-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  text-decoration: none;
+}
+.navbar-logo {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 2px 6px rgba(212,175,55,.4));
+}
+.navbar-brand-text {
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: .5px;
+}
+.al-navbar .navbar-brand:hover .navbar-brand-text {
+  color: var(--accent);
+}
   display: flex;
   align-items: center;
   gap: .5rem;
   font-weight: 700;
   font-size: 1.25rem;
   color: var(--white) !important;
-}
-.al-navbar .navbar-brand.navbar-brand-empty {
-  min-width: 12px;
-  padding: 0;
-  margin-right: .5rem;
-}
-.al-navbar .navbar-brand img {
-  height: 36px;
-  width: auto;
 }
 .al-navbar .nav-link {
   color: rgba(255,255,255,.85) !important;
@@ -750,7 +734,8 @@ img { max-width: 100%; height: auto; }
 /* ---- Support page ---- */
 .support-hero {
   background: linear-gradient(135deg, var(--primary-dark) 0%, #2c2c2c 55%, var(--primary) 100%);
-  padding: 10rem 0 5rem;
+  padding-top: 120px;
+  padding-bottom: 5rem;
   position: relative;
   overflow: hidden;
 }

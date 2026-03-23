@@ -25,12 +25,10 @@
 
   <!-- ===== Navbar ===== -->
   <nav class="al-navbar navbar navbar-expand-lg fixed-top">
-    <div class="navbar-art" aria-hidden="true">
-      <img src="{% static 'img/navibar.svg' %}" alt="">
-    </div>
-    <div class="container position-relative">
-      <a class="navbar-brand navbar-brand-empty" href="{% url 'home' %}" aria-label="Al-Minār Home">
-        <span class="visually-hidden">Al-Minār</span>
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'img/herodesk.svg' %}" alt="Al-Minār" class="navbar-logo">
+        <span class="navbar-brand-text">Al-Minār</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
         <span class="navbar-toggler-icon"></span>
