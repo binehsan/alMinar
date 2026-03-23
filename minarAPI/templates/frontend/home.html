@@ -10,19 +10,19 @@
   <div class="container">
     <div class="row align-items-center">
       <div class="col-lg-6 position-relative" style="z-index:2">
-        <div class="hero-badge mt-5 mt-lg-4">
+        <div class="hero-badge mt-5 mt-lg-4 fade-up">
           <i class="fas fa-mosque"></i>
           Global Masjid Registry
         </div>
-        <h1>
+        <h1 class="fade-up" style="animation-delay:.1s">
           Discover &amp; Trust<br>
           Your Local <span>Masjid</span>
         </h1>
-        <p class="lead">
+        <p class="lead fade-up" style="animation-delay:.2s">
           Al-Minār is a transparent, community-driven registry that helps you find masjids 
           and verify their authenticity through our confidence system.
         </p>
-        <div class="d-flex flex-wrap gap-3 mb-3">
+        <div class="d-flex flex-wrap gap-3 mb-3 fade-up" style="animation-delay:.3s">
           <a href="{% url 'explore' %}" class="btn btn-al-primary">
             <i class="fas fa-compass me-2"></i>Explore Masjids
           </a>
@@ -31,23 +31,23 @@
           </a>
         </div>
 
-        <div class="stat-strip">
+        <div class="stat-strip fade-up" style="animation-delay:.4s">
           <div class="stat-item">
-            <div class="stat-number">{{ masjid_count }}</div>
+            <div class="stat-number" data-count="{{ masjid_count }}">0</div>
             <div class="stat-label">Masjids</div>
           </div>
           <div class="stat-item">
-            <div class="stat-number">{{ country_count }}</div>
+            <div class="stat-number" data-count="{{ country_count }}">0</div>
             <div class="stat-label">Countries</div>
           </div>
           <div class="stat-item">
-            <div class="stat-number">{{ verified_count }}</div>
+            <div class="stat-number" data-count="{{ verified_count }}">0</div>
             <div class="stat-label">Verified</div>
           </div>
         </div>
       </div>
-      <div class="col-lg-6 text-center mt-4 mt-lg-0">
-        <img src="{% static 'img/herodesk.png' %}" alt="Al-Minār" class="hero-logo">
+      <div class="col-lg-6 text-center mt-4 mt-lg-0 fade-up" style="animation-delay:.5s">
+        <img src="{% static 'img/herodesk.svg' %}" alt="Al-Minār" class="hero-logo float-anim">
       </div>
     </div>
   </div>
@@ -188,7 +188,7 @@
 <!-- ===== CTA ===== -->
 <section class="py-5" style="background:linear-gradient(135deg, var(--primary-dark), var(--primary))">
   <div class="container text-center fade-up">
-    <img src="{% static 'img/herodesk.png' %}" alt="Al-Minār" style="height:72px;margin-bottom:1.5rem;filter:brightness(0) invert(1) opacity(.8)">
+    <img src="{% static 'img/herodesk.svg' %}" alt="Al-Minār" style="height:72px;margin-bottom:1.5rem;filter:brightness(0) invert(1) opacity(.8)">
     <h2 class="text-white fw-bold mb-3">Help Build the Registry</h2>
     <p class="text-white-50 mb-4 mx-auto" style="max-width:500px">
       Every signal strengthens trust. Verify your local masjid and contribute to the global community.

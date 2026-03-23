@@ -73,6 +73,57 @@ async function apiFetch(endpoint, params = {}) {
   return res.json();
 }
 
+// ---- Toast notifications ----
+function showToast(message, type = 'success') {
+  let toast = document.querySelector('.al-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'al-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ---- Count-up animation ----
+function animateCountUp() {
+  const counters = document.querySelectorAll('.stat-number[data-count]');
+  counters.forEach(counter => {
+    const target = parseInt(counter.getAttribute('data-count'), 10) || 0;
+    const duration = 2000; // 2 seconds
+    const startTime = performance.now();
+    const startValue = 0;
+    
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(startValue + (target - startValue) * easeOut);
+      counter.textContent = current.toLocaleString();
+      
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        counter.textContent = target.toLocaleString();
+      }
+    }
+    
+    // Use IntersectionObserver to trigger when visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          requestAnimationFrame(update);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    observer.observe(counter);
+  });
+}
+
 function confidenceBadgeHTML(level) {
   const map = {
     0: { cls: 'c0', icon: 'fas fa-circle', label: 'Community Reported' },
@@ -877,6 +928,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   initHeroSearch();
   initScrollAnimations();
+  animateCountUp();
   loadFeatured();
   initExplore();
   initDetail();

@@ -6,31 +6,31 @@
 {% block content %}
 <section class="support-hero">
   <div class="container">
-    <div class="row align-items-center g-4">
+    <div class="row align-items-center g-5">
       <div class="col-lg-7 fade-up">
-        <div class="section-tag">Community Powered</div>
-        <h1>Support Al-Minār</h1>
-        <p>
-          Help us build the world’s most trusted masjid registry. Your support keeps data accurate,
-          widens coverage, and helps more Muslims find verified local masjids.
+        <div class="section-tag" style="background:rgba(212,175,55,.2);color:var(--accent-light)">Community Powered</div>
+        <h1>Support Al-Minar</h1>
+        <p class="lead" style="font-size:1.15rem;line-height:1.8">
+          Help us build the world's most trusted masjid registry. Your support keeps data accurate,
+          widens coverage, and helps more Muslims find verified local masjids worldwide.
         </p>
         <div class="d-flex flex-wrap gap-3 mt-4">
-          <a href="{% url 'report' %}" class="btn btn-al-primary">
+          <a href="{% url 'report' %}" class="btn btn-al-primary btn-lg">
             <i class="fas fa-plus-circle me-2"></i>Add a Masjid
           </a>
-          <a href="{{ donation_url }}" target="_blank" rel="noopener" class="btn btn-al-outline">
+          <a href="{{ donation_url }}" target="_blank" rel="noopener" class="btn btn-al-outline btn-lg">
             <i class="fas fa-hand-holding-heart me-2"></i>Donate
           </a>
         </div>
       </div>
       <div class="col-lg-5 text-center fade-up">
-        <img src="{% static 'img/herodesk.png' %}" alt="Support Al-Minār" class="support-hero-logo">
+        <img src="{% static 'img/herodesk.svg' %}" alt="Support Al-Minār" class="support-hero-logo">
       </div>
     </div>
   </div>
 </section>
 
-<section class="py-5">
+<section class="py-5" style="margin-top:-2rem;position:relative;z-index:5">
   <div class="container">
     <div class="section-heading fade-up">
       <div class="section-tag">Ways to Help</div>
@@ -41,30 +41,120 @@
       <div class="col-md-6 col-lg-4 fade-up">
         <div class="support-card h-100">
           <div class="support-icon"><i class="fas fa-mosque"></i></div>
-          <h5>Add Masjids (Main Way)</h5>
-          <p>Report missing masjids with accurate location details to grow the registry quickly and reliably.</p>
-          <a href="{% url 'report' %}" class="btn btn-al-primary btn-sm mt-2">Add a Masjid</a>
+          <h5>Add Masjids</h5>
+          <span class="badge" style="background:var(--accent);color:var(--white);font-size:.7rem;margin-bottom:.75rem">Main Way to Help</span>
+          <p>Report missing masjids with accurate location details to grow the registry quickly and reliably. Every submission helps the Ummah.</p>
+          <a href="{% url 'report' %}" class="btn btn-al-primary w-100 mt-auto">
+            <i class="fas fa-plus me-2"></i>Add a Masjid
+          </a>
         </div>
       </div>
       <div class="col-md-6 col-lg-4 fade-up">
         <div class="support-card h-100">
           <div class="support-icon"><i class="fas fa-donate"></i></div>
           <h5>Donate</h5>
-          <p>Support hosting, verification reviews, and ongoing platform development with a financial contribution.</p>
-          <a href="{{ donation_url }}" target="_blank" rel="noopener" class="btn btn-al-primary btn-sm mt-2">Go to Donation Link</a>
+          <p>Support hosting, verification reviews, and ongoing platform development with a financial contribution. Even small amounts make a difference.</p>
+          <a href="{{ donation_url }}" target="_blank" rel="noopener" class="btn btn-al-outline-dark w-100 mt-auto">
+            <i class="fas fa-external-link-alt me-2"></i>Go to Donation
+          </a>
         </div>
       </div>
       <div class="col-md-6 col-lg-4 fade-up">
         <div class="support-card h-100">
           <div class="support-icon"><i class="fas fa-bullhorn"></i></div>
-          <h5>Promote on Social Media</h5>
-          <p>Share Al-Minār with your network and help communities discover and verify their local masjids.</p>
-          <div class="d-flex flex-wrap gap-2 mt-2">
-            <a href="{{ x_share_url }}" target="_blank" rel="noopener" class="support-social-btn"><i class="fab fa-x-twitter"></i> X</a>
-            <a href="{{ facebook_share_url }}" target="_blank" rel="noopener" class="support-social-btn"><i class="fab fa-facebook-f"></i> Facebook</a>
-            <a href="{{ linkedin_share_url }}" target="_blank" rel="noopener" class="support-social-btn"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
-            <a href="{{ whatsapp_share_url }}" target="_blank" rel="noopener" class="support-social-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <h5>Spread the Word</h5>
+          <p>Share Al-Minar with your network and help communities discover and verify their local masjids. Your voice matters!</p>
+          <div class="d-flex flex-wrap gap-2 mt-auto justify-content-center">
+            <a href="{{ x_share_url }}" target="_blank" rel="noopener" class="support-social-btn" title="Share on X">
+              <i class="fab fa-x-twitter"></i>
+            </a>
+            <a href="{{ facebook_share_url }}" target="_blank" rel="noopener" class="support-social-btn" title="Share on Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="{{ linkedin_share_url }}" target="_blank" rel="noopener" class="support-social-btn" title="Share on LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="{{ whatsapp_share_url }}" target="_blank" rel="noopener" class="support-social-btn" title="Share on WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="mailto:?subject=Check%20out%20Al-Minar&body=Discover%20verified%20masjids%20worldwide%20at%20Al-Minar" class="support-social-btn" title="Share via Email">
+              <i class="fas fa-envelope"></i>
+            </a>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-surface">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6 fade-up">
+        <div class="section-tag">For Developers</div>
+        <h2 style="font-weight:800;color:var(--primary-dark)">Contribute to Open Source</h2>
+        <p class="text-muted" style="font-size:1rem;line-height:1.8">
+          Al-Minar is built with transparency in mind. Developers can contribute to our open-source codebase, 
+          help improve the API, or build integrations that benefit the community.
+        </p>
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <a href="https://github.com" target="_blank" rel="noopener" class="btn btn-al-outline-dark">
+            <i class="fab fa-github me-2"></i>View on GitHub
+          </a>
+          <a href="/api/" class="btn btn-al-outline-dark">
+            <i class="fas fa-code me-2"></i>API Docs
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6 fade-up">
+        <div class="support-card" style="background:linear-gradient(135deg, var(--primary-dark), var(--primary));color:var(--white)">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div style="width:56px;height:56px;border-radius:14px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center">
+              <i class="fas fa-hands-helping" style="font-size:1.4rem"></i>
+            </div>
+            <div>
+              <h5 style="color:var(--white);margin-bottom:.15rem">Volunteer with Us</h5>
+              <small style="opacity:.75">Help verify masjids in your area</small>
+            </div>
+          </div>
+          <p style="opacity:.85;font-size:.9rem;line-height:1.7">
+            Become a volunteer verifier! Help confirm masjid locations, update prayer times, 
+            and ensure accurate information for your local community.
+          </p>
+          <a href="{% url 'register' %}" class="btn btn-al-primary mt-2">
+            <i class="fas fa-user-plus me-2"></i>Join as Volunteer
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-6 col-md-3 fade-up">
+        <div class="p-4">
+          <div style="font-size:2.5rem;font-weight:900;color:var(--accent)">100+</div>
+          <div class="text-muted small text-uppercase" style="letter-spacing:1px">Masjids Listed</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 fade-up">
+        <div class="p-4">
+          <div style="font-size:2.5rem;font-weight:900;color:var(--accent)">20+</div>
+          <div class="text-muted small text-uppercase" style="letter-spacing:1px">Countries</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 fade-up">
+        <div class="p-4">
+          <div style="font-size:2.5rem;font-weight:900;color:var(--accent)">50+</div>
+          <div class="text-muted small text-uppercase" style="letter-spacing:1px">Verified</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 fade-up">
+        <div class="p-4">
+          <div style="font-size:2.5rem;font-weight:900;color:var(--accent)"><i class="fas fa-heart" style="font-size:2rem"></i></div>
+          <div class="text-muted small text-uppercase" style="letter-spacing:1px">Community Driven</div>
         </div>
       </div>
     </div>
